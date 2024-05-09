@@ -1,21 +1,22 @@
 load "$NCARG_ROOT/lib/ncarg/nclscripts/csm/gsn_code.ncl"
 load "$NCARG_ROOT/lib/ncarg/nclscripts/csm/gsn_csm.ncl"
 
-adir="/g/data/zv2/agcd/v1-0-1/precip/total/r005/01day/"
+adir="/g/data/ob53/BARRA2/output/reanalysis/AUS-11/BOM/ERA5/historical/hres/BARRA-R2/v1/day/pr/v20231001/"
 years=ispan(1991,2020,1)
-thresh=25
 
-a=addfile(adir+"agcd_v1-0-1_precip_total_r005_daily_2022.nc","r")
-lat=a->lat
-lon=a->lon
+mfile=addfile("/g/data/ob53/BARRA2/output/reanalysis/AUS-11/BOM/ERA5/historical/hres/BARRA-R2/v1/fx/sftlf/v20231001/sftlf_AUS-11_ERA5_historical_hres_BOM_BARRA-R2_v1_fx.nc","r")
+mval=mfile->sftlf
+lat=mfile->lat
+lon=mfile->lon
 pr=new((/dimsizes(years),dimsizes(lat),dimsizes(lon)/),"float")
 
 do y=0,dimsizes(years)-1
  print(years(y))
- a=addfile(adir+"agcd_v1-0-1_precip_total_r005_daily_"+years(y)+".nc","r")
- tmp=a->precip
- pr(y,:,:)=dim_sum_n(where(tmp.ge.thresh,1,0),0)
- delete([/tmp,a/])
+ a=addfiles(systemfunc("ls "+adir+"pr_AUS-11_ERA5_historical_hres_BOM_BARRA-R2_v1_day_"+years(y)+"*.nc"),"r")
+ tmp=a[:]->pr
+ tmp2=tofloat(60*60*24*(tmp*tmp@scale_factor))
+ pr(y,:,:)=dim_max_n(tmp2,0)
+ delete([/tmp,a,tmp2/])
 end do
 
 pr!0="time"
@@ -25,18 +26,13 @@ pr&lat=lat
 pr!2="lon"
 pr&lon=lon
 
-pr2=dim_avg_n_Wrap(pr,0)
-
-mfile=addfile("/g/data/eg3/asp561/Shapefiles/mask_australia_0.05deg.nc","r")
-mval=mfile->landmask
-mval=where(mval.eq.0,mval@_FillValue,mval)
+pr2=dim_max_n_Wrap(pr,0) ;pr2=dim_avg_n_Wrap(pr,0)
 
   res                      = True               ; plot mods desired
   res@cnFillOn             = True               ; turn on color fill
   res@cnLevelSelectionMode = "ExplicitLevels"
 ;  res@cnLevels             = (/20,30,40,50,60,70,80,100,120,140,160/); ispan(20,120,10)
-  res@cnLevels= (/0.5,1,2,3,4,5,6,7.5,10,12.5,15/)
-;  res@cnLevels = (/0.1,0.2,0.5,1,1.5,2,3,4,6,8,10/)
+  res@cnLevels = (/25,50,75,100,150,200,300,400,500,600,800/)
   res@gsnAddCyclic = False
   res@gsnDraw  = False                          ; don't draw
   res@gsnFrame = False                          ; don't advance frame
@@ -89,7 +85,7 @@ wks_type = "pdf"
 wks_type@wkPaperWidthF = 4
 wks_type@wkPaperHeightF = 4.6
 
-  wks = gsn_open_wks(wks_type,"days"+thresh+"_mean_19912020_AWAP")             ; send graphics to PNG file
+  wks = gsn_open_wks(wks_type,"Rx1D_mean_19912020_BARRA")             ; send graphics to PNG file
 
   gsn_define_colormap(wks,"precip_11lev")
 ;  gsn_reverse_colormap(wks)
