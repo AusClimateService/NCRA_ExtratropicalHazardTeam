@@ -17,7 +17,6 @@ ssp=ssp370
 for m in {0..14} ; do
 #for model in CMCC-ESM2 ACCESS-ESM1-5 ACCESS-CM2 EC-Earth3 MPI-ESM1-2-HR CESM2 NorESM2-MM ; do
 for year in {2015..2099}; do
- cdo timmax ${dir}/${model[$m]}/${ssp}/${member[$m]}/${version[$m]}/v1-r1/day/pr/v20231215/pr_AUS-20i_*${year}1231.nc /scratch/eg3/asp561/NCRA/CCAM-UQ-DES/RX1D_CCAM-QLD_${model[$m]}_${member[$m]}_${version[$m]}_${ssp}_${year}.nc
 
  cdo timmax ${dir}/${model[$m]}/${ssp}/${member[$m]}/${version[$m]}/v1-r1/1hr/pr/v20231215/pr_AUS-20i_*${year}1231.nc /scratch/eg3/asp561/NCRA/CCAM-UQ-DES/RX1H_CCAM-QLD_${model[$m]}_${member[$m]}_${version[$m]}_${ssp}_${year}.nc
 
@@ -26,11 +25,6 @@ done
 cdo mergetime /scratch/eg3/asp561/NCRA/CCAM-UQ-DES/RX1H_CCAM-QLD_${model[$m]}_${member[$m]}_${version[$m]}_${ssp}_????.nc  /scratch/eg3/asp561/NCRA/CCAM-UQ-DES/tmp1.nc
 cdo mulc,3600 /scratch/eg3/asp561/NCRA/CCAM-UQ-DES/tmp1.nc /scratch/eg3/asp561/NCRA/CCAM-UQ-DES/tmp2.nc
  cdo -setattribute,prhmax@units=mm /scratch/eg3/asp561/NCRA/CCAM-UQ-DES/tmp2.nc  /scratch/eg3/asp561/NCRA/CCAM-UQ-DES/RX1H_CCAM-QLD_${model[$m]}_${member[$m]}_${version[$m]}_${ssp}.nc
-rm /scratch/eg3/asp561/NCRA/CCAM-UQ-DES/tmp?.nc
-
-cdo mergetime /scratch/eg3/asp561/NCRA/CCAM-UQ-DES/RX1D_CCAM-QLD_${model[$m]}_${member[$m]}_${version[$m]}_${ssp}_????.nc  /scratch/eg3/asp561/NCRA/CCAM-UQ-DES/tmp1.nc
-cdo mulc,86400 /scratch/eg3/asp561/NCRA/CCAM-UQ-DES/tmp1.nc /scratch/eg3/asp561/NCRA/CCAM-UQ-DES/tmp2.nc
- cdo -setattribute,pr@units=mm /scratch/eg3/asp561/NCRA/CCAM-UQ-DES/tmp2.nc  /scratch/eg3/asp561/NCRA/CCAM-UQ-DES/RX1D_CCAM-QLD_${model[$m]}_${member[$m]}_${version[$m]}_${ssp}.nc
 rm /scratch/eg3/asp561/NCRA/CCAM-UQ-DES/tmp?.nc
 
 rm /scratch/eg3/asp561/NCRA/CCAM-UQ-DES/RX1?_CCAM-QLD_${model[$m]}_${member[$m]}_${version[$m]}_${ssp}_????.nc
