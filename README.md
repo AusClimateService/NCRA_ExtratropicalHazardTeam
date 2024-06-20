@@ -1,4 +1,5 @@
 # ACS Hazard Team on Extratropical Storms
+Last update: 20/06/2024
 
 ## Description
 GitHub repository for ACS Hazard Team on Extratropical Storms to store, track and develop code. 
@@ -16,6 +17,7 @@ The three dots (in order from first/top/left to last/bottom/right) represent the
 - Dot 1: Pre-processed BARPA/CCAM – downscaled but NOT bias-corrected, 5 km (deliverable for 30 June)
 - Dot 2: Bias-corrected BARPA/CCAM – downscaled AND bias-corrected, 5 km (deliverable for 31 July)
 - Dot 3: National Hydrological Projections (NHP1.0) based on CMIP5 – bias-corrected, 5km
+  
 Note that bias correction is not available for pressure data or sub-daily data
  
 In terms of the colors:
@@ -26,10 +28,10 @@ In terms of the colors:
 
 | Index/metric | time series (ts) | GWLs 2D | MME 2D | MME 2D change | (Notes) |
 |-----         | :-:              |:-:      |:-:     |:-:            |-----    |
-| low_freq|:green_circle:<br><br>|:yellow_circle:<br><br>|:yellow_circle:<br><br>|:yellow_circle:<br><br>|deliverable for 30 June<br>N/A<br>N/A|
-| RX1D |:green_circle:<br>:yellow_circle:<br>:yellow_circle:|:yellow_circle:<br>:red_circle:<br>:white_circle:|:yellow_circle:<br>:red_circle:<br>:white_circle:|:yellow_circle:<br>:red_circle:<br>:white_circle:|deliverable for 30 June<br>deliverable for 31 July<br>N/A|
-| RX5D |:green_circle:<br>:yellow_circle:<br>:yellow_circle:|:yellow_circle:<br>:red_circle:<br>:white_circle:|:yellow_circle:<br>:red_circle:<br>:white_circle:|:yellow_circle:<br>:red_circle:<br>:white_circle:||deliverable for 30 June<br>deliverable for 31 July<br>N/A|
-| RX1H |:green_circle:<br><br>|:yellow_circle:<br><br>|:yellow_circle:<br><br>|:yellow_circle:<br><br>|deliverable for 30 June<br>N/A<br>N/A|
+| low_freq|:green_circle:<br>|:green_circle:<br>|:green_circle:<br>|:green_circle:<br>|deliverable for 30 June<br>N/A<br>N/A|
+| RX1D |:green_circle:<br>:yellow_circle:<br>:yellow_circle:|:green_circle:<br>:red_circle:<br>:white_circle:|:green_circle:<br>:red_circle:<br>:white_circle:|:green_circle:<br>:red_circle:<br>:white_circle:|deliverable for 30 June<br>deliverable for 31 July<br>N/A|
+| RX5D |:green_circle:<br>:yellow_circle:<br>:yellow_circle:|:green_circle:<br>:red_circle:<br>:white_circle:|:green_circle:<br>:red_circle:<br>:white_circle:|:green_circle:<br>:red_circle:<br>:white_circle:||deliverable for 30 June<br>deliverable for 31 July<br>N/A|
+| RX1H |:green_circle:<br>|:green_circle:<br>|:green_circle:<br>|:green_circle:<br>|deliverable for 30 June<br>N/A<br>N/A|
 
 ## Data location
 /g/data/ia39/ncra/extratropical_storms/
