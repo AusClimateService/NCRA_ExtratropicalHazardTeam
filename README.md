@@ -1,7 +1,7 @@
-# ACS Hazard Team on Drought and Changes in Aridity
+# ACS Hazard Team on Extratropical Storms
 
 ## Description
-GitHub repository for ACS Hazard Team on Drought and Changes in Aridity to store, track and develop code. 
+GitHub repository for ACS Hazard Team on Extratropical Storms to store, track and develop code. 
 
 ## Indices considered by the hazard team:
 - Proportion of observations influenced by a low
