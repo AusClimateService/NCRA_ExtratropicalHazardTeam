@@ -11,23 +11,6 @@ mval=where(mval.eq.0,mval@_FillValue,mval)
 mlat=mfile->latitude
 mlon=mfile->longitude
 
-a=addfile("/g/data/py18/BARPA/output/CMIP6/DD/AUS-15/BOM/ERA5/evaluation/r1i1p1f1/BARPA-R/v1-r1/fx/sftlf/v20231001/sftlf_AUS-15_ERA5_evaluation_r1i1p1f1_BOM_BARPA-R_v1-r1_fx.nc","r")
-bval=a->sftlf
-blat=a->lat
-blon=a->lon
-
-a=addfile("/g/data/hq89/CCAM/output/CMIP6/DD/AUS-10i/CSIRO/ERA5/evaluation/r1i1p1f1/CCAM-v2203-SN/v1-r1/fx/sftlf/v20231206/sftlf_AUS-10i_ERA5_evaluation_r1i1p1f1_CSIRO_CCAM-v2203-SN_v1-r1.nc","r")
-cval=a->sftlf
-clat=a->lat
-clon=a->lon
-delete(a)
-
-a=addfile("/g/data/ig45/QldFCP-2/CORDEX/CMIP6/DD/AUS-20i/UQ-DES/ERA5/evaluation/r1i1p1f1/CCAM-v2112/v1-r1/fx/sftlf/v20231215/sftlf_AUS-20i_ERA5_evaluation_r1i1p1f1_UQ-DES_CCAM-v2112_v1-r1.nc","r")
-qval=a->sftlf
-qlat=a->lat
-qlon=a->lon
-delete(a)
-
 
 ; Step two - list all the models and members
 
