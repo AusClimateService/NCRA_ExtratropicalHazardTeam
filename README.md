@@ -1,3 +1,57 @@
+# ACS Hazard Team on Drought and Changes in Aridity
+
+## Description
+GitHub repository for ACS Hazard Team on Drought and Changes in Aridity to store, track and develop code. 
+
+## Indices considered by the hazard team:
+- Proportion of observations influenced by a low
+- Highest annual 24 hour total (RX1D)
+- Highest annual 5-day total (RX5D)
+- Highest annual hourly total (RX1H)
+
+## Products:
+Status of the NCRA deliverables. 
+
+The three dots (in order from first/top/left to last/bottom/right) represent the datasets used to compute indices:
+- Dot 1: Pre-processed BARPA/CCAM – downscaled but NOT bias-corrected, 5 km (deliverable for 30 June)
+- Dot 2: Bias-corrected BARPA/CCAM – downscaled AND bias-corrected, 5 km (deliverable for 31 July)
+- Dot 3: National Hydrological Projections (NHP1.0) based on CMIP5 – bias-corrected, 5km
+Where only one dot is in the cell the format type does not apply to the metric, e.g. no time series for rainfall 15th percentile.
+ 
+In terms of the colors:
+- :green_circle: The data is available in its final official form
+- :yellow_circle: The data creation is currently in progress and available soon
+- :red_circle: The data processing has not yet started
+- :white_circle: Not intended for delivery/not applicable
+
+| Index/metric | time series (ts) | GWLs 2D | MME 2D | MME 2D change | (Notes) |
+|-----         | :-:              |:-:      |:-:     |:-:            |-----    |
+| low_freq|:green_circle:<br><br>|:yellow_circle:<br><br>|:yellow_circle:<br><br>|:yellow_circle:<br><br>|deliverable for 30 June<br>deliverable for 31 July<br>N/A|
+| RX1D |:green_circle:<br>:yellow_circle:<br>:yellow_circle:|:yellow_circle:<br>:red_circle:<br>:white_circle:|:yellow_circle:<br>:red_circle:<br>:white_circle:|:yellow_circle:<br>:red_circle:<br>:white_circle:|deliverable for 30 June<br>deliverable for 31 July<br>N/A|
+| RX5D |:green_circle:<br>:yellow_circle:<br>:yellow_circle:|:yellow_circle:<br>:red_circle:<br>:white_circle:|:yellow_circle:<br>:red_circle:<br>:white_circle:|:yellow_circle:<br>:red_circle:<br>:white_circle:||deliverable for 30 June<br>deliverable for 31 July<br>N/A|
+| RX1H |:green_circle:<br><br>|:yellow_circle:<br><br>|:yellow_circle:<br><br>|:yellow_circle:<br><br>|N/A<br>N/A<br>deliverable for 31 July|
+
+## Data location
+/g/data/ia39/ncra/extratropical_storms/
+
+## Authors and acknowledgment
+Hazard team:
+- [ ] Acacia Pepler (BOM, lead)
+- [ ] James Risbey (CSIRO, alternate lead)
+
+## Details on extratropical lows
+
+Lows are initially identified as individual cyclone centres at a single atmospheric level, and can have a range of intensities.
+For the purposes of this intial dataset we include:
+- Surface lows that have closed circulation and persist for at least 6 hours
+- Which have a matching low at 500hPa within 500km at least once
+  
+Any grid point within a 5 degree (500km radius) of the low centre is considered to be influenced by the low.
+This is used to calculate what proportion of all 6-hourly observations are influenced by a low
+Note that this tracking does not disinguish between extratropial lows or tropical lows (including but not limited to tropical cyclones)
+
+## Details of code 
+
 This is a directory of code developed by the NCRA Extratropical Storm Hazard Team
 
 The early files are a dump of code used to create preliminary maps of extratropical storms and extreme rainfall as part of the NCRA Extratropical Storm Hazard Team 2-pagers
