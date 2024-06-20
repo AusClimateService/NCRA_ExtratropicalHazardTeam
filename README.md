@@ -16,7 +16,7 @@ The three dots (in order from first/top/left to last/bottom/right) represent the
 - Dot 1: Pre-processed BARPA/CCAM – downscaled but NOT bias-corrected, 5 km (deliverable for 30 June)
 - Dot 2: Bias-corrected BARPA/CCAM – downscaled AND bias-corrected, 5 km (deliverable for 31 July)
 - Dot 3: National Hydrological Projections (NHP1.0) based on CMIP5 – bias-corrected, 5km
-Where only one dot is in the cell the format type does not apply to the metric, e.g. no time series for rainfall 15th percentile.
+Note that bias correction is not available for pressure data or sub-daily data
  
 In terms of the colors:
 - :green_circle: The data is available in its final official form
