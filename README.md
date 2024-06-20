@@ -26,10 +26,10 @@ In terms of the colors:
 
 | Index/metric | time series (ts) | GWLs 2D | MME 2D | MME 2D change | (Notes) |
 |-----         | :-:              |:-:      |:-:     |:-:            |-----    |
-| low_freq|:green_circle:<br><br>|:yellow_circle:<br><br>|:yellow_circle:<br><br>|:yellow_circle:<br><br>|deliverable for 30 June<br>deliverable for 31 July<br>N/A|
+| low_freq|:green_circle:<br><br>|:yellow_circle:<br><br>|:yellow_circle:<br><br>|:yellow_circle:<br><br>|deliverable for 30 June<br>N/A<br>N/A|
 | RX1D |:green_circle:<br>:yellow_circle:<br>:yellow_circle:|:yellow_circle:<br>:red_circle:<br>:white_circle:|:yellow_circle:<br>:red_circle:<br>:white_circle:|:yellow_circle:<br>:red_circle:<br>:white_circle:|deliverable for 30 June<br>deliverable for 31 July<br>N/A|
 | RX5D |:green_circle:<br>:yellow_circle:<br>:yellow_circle:|:yellow_circle:<br>:red_circle:<br>:white_circle:|:yellow_circle:<br>:red_circle:<br>:white_circle:|:yellow_circle:<br>:red_circle:<br>:white_circle:||deliverable for 30 June<br>deliverable for 31 July<br>N/A|
-| RX1H |:green_circle:<br><br>|:yellow_circle:<br><br>|:yellow_circle:<br><br>|:yellow_circle:<br><br>|N/A<br>N/A<br>deliverable for 31 July|
+| RX1H |:green_circle:<br><br>|:yellow_circle:<br><br>|:yellow_circle:<br><br>|:yellow_circle:<br><br>|deliverable for 30 June<br>N/A<br>N/A|
 
 ## Data location
 /g/data/ia39/ncra/extratropical_storms/
