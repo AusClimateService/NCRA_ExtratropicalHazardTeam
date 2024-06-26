@@ -53,6 +53,10 @@ Notes:
 | RX5D |-0.8%<br>(-16% to +17%)|+0.6%<br>(-21% to +28%)|+5.8%<br>(-18% to +36%)||
 | RX1H |+0.8%<br>(-11% to +14%)|+3.2%<br>(-14% to +24%)|+10.2%<br>(-9% to +34%)||
 
+| RX1D | Low frequency |
+|----- |-----    |
+|![](RX1D_AGCD-05i_MM50_ssp370_v1-r1_GWL30_change.png) |-----    |
+|Multi-model median of the % change in RX1D between GWL1.2 and GWL3 |Multi-model median of the % change in low frequency between GWL1.2 and GWL3 |
 
 ## Authors and acknowledgment
 Hazard team:
