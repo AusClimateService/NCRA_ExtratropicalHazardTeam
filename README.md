@@ -36,6 +36,23 @@ In terms of the colors:
 ## Data location
 /g/data/ia39/ncra/extratropical_storms/
 
+## Summary statistics
+
+This table gives the Australian average of the median % change between values at GWL1.2 and at GWLs 1.5, 2, and 3.
+
+Notes:
+- The data in this table has not been bias corrected; models may have large biases in their simulation of the current climate 
+- The change factors for each percentile are averaged across the whole of Australia - note that this can give slightly *smaller changes* and a *larger range of uncertainty* when compared to changes calculated from regional mean timeseries, as these datasets can have very large interannual variability at individual locations.
+- For the case of low frequency, "Australian" averages are calculated only for latitudes south of 30S, to avoid contamination by trends in tropical lows
+
+| Index/metric | GWL1.5 | GWL2 | GWL3 | (Notes) |
+|-----         | :-:    |:-:   |:-:   |-----    |
+| low_freq*|-5.5%<br>(-16% to +12%)|-9.0<br>(-24% to +11%)|-12.8%<br>(-32.7% to +2.4%)|*calculated for locations south of 30S|
+| RX1D |-0.2%<br>(-16% to +19%)|+1.9%<br>(-21% to +32%)|+7.9%<br>(-18% to +41%)||
+| RX5D |-0.8%<br>(-16% to +17%)|+0.6%<br>(-21% to +28%)|+5.8%<br>(-18% to +36%)||
+| RX1H |+0.8%<br>(-11% to +14%)|+3.2%<br>(-14% to +24%)|+10.2%<br>(-9% to +34%)||
+
+
 ## Authors and acknowledgment
 Hazard team:
 - [ ] Acacia Pepler (BOM, lead)
