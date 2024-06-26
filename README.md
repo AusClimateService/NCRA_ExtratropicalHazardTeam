@@ -46,12 +46,12 @@ Notes:
 - For the case of low frequency, "Australian" averages are calculated only for latitudes south of 30S, to avoid contamination by trends in tropical lows
 - GWL1.2 represents the "current climate", centred around 2020. Changes in indices have already occurred between the current climate and historical values such as 1961-1990/
 
-| Index/metric | GWL1.5 | GWL2 | GWL3 | (Notes) |
-|-----         | :-:    |:-:   |:-:   |-----    |
-| low_freq*|-5.5%<br>(-16% to +12%)|-9.0%<br>(-24% to +11%)|-12.8%<br>(-32.7% to +2.4%)|*calculated for locations south of 30S|
-| RX1D |-0.2%<br>(-16% to +19%)|+1.9%<br>(-21% to +32%)|+7.9%<br>(-18% to +41%)||
-| RX5D |-0.8%<br>(-16% to +17%)|+0.6%<br>(-21% to +28%)|+5.8%<br>(-18% to +36%)||
-| RX1H |+0.8%<br>(-11% to +14%)|+3.2%<br>(-14% to +24%)|+10.2%<br>(-9% to +34%)||
+| Index/metric | Current climate <br>1991-2020| GWL1.5 | GWL2 | GWL3 | (Notes) |
+|-----         | :-:                           | :-:    |:-:   |:-:   |-----    |
+| low_freq*||-5.5%<br>(-16% to +12%)|-9.0%<br>(-24% to +11%)|-12.8%<br>(-32.7% to +2.4%)|*calculated for locations south of 30S<br>Current climate is from BARRA-R2|
+| RX1D ||-0.2%<br>(-16% to +19%)|+1.9%<br>(-21% to +32%)|+7.9%<br>(-18% to +41%)|Current climate is from AGCDv1|
+| RX5D ||-0.8%<br>(-16% to +17%)|+0.6%<br>(-21% to +28%)|+5.8%<br>(-18% to +36%)|Current climate is from AGCDv1|
+| RX1H ||+0.8%<br>(-11% to +14%)|+3.2%<br>(-14% to +24%)|+10.2%<br>(-9% to +34%)|Current climate is from BARRA-R2, but this dataset may be biased|
 
 | RX1D | Low frequency |
 |----- |-----    |
