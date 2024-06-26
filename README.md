@@ -27,7 +27,7 @@ In terms of the colors:
 - :white_circle: Not intended for delivery/not applicable
 
 | Index/metric | time series (ts) | GWLs 2D | MME 2D | MME 2D change | (Notes) |
-|-----         | :-:              |:-:      |:-:     |:-:            |-----    |
+|-----         | :-:              |:-:      |:-:     |:-:            |:-:    |
 | low_freq|:green_circle:<br>|:green_circle:<br>|:green_circle:<br>|:green_circle:<br>|deliverable for 30 June<br>N/A<br>N/A|
 | RX1D |:green_circle:<br>:yellow_circle:<br>:yellow_circle:|:green_circle:<br>:red_circle:<br>:white_circle:|:green_circle:<br>:red_circle:<br>:white_circle:|:green_circle:<br>:red_circle:<br>:white_circle:|deliverable for 30 June<br>deliverable for 31 July<br>N/A|
 | RX5D |:green_circle:<br>:yellow_circle:<br>:yellow_circle:|:green_circle:<br>:red_circle:<br>:white_circle:|:green_circle:<br>:red_circle:<br>:white_circle:|:green_circle:<br>:red_circle:<br>:white_circle:||deliverable for 30 June<br>deliverable for 31 July<br>N/A|
