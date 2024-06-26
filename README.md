@@ -44,7 +44,7 @@ Notes:
 - The data in this table has not been bias corrected; models may have large biases in their simulation of the current climate 
 - The change factors for each percentile are averaged across the whole of Australia - note that this can give slightly *smaller changes* and a *larger range of uncertainty* when compared to changes calculated from regional mean timeseries, as these datasets can have very large interannual variability at individual locations.
 - For the case of low frequency, "Australian" averages are calculated only for latitudes south of 30S, to avoid contamination by trends in tropical lows
-- GWL1.2 represents the "current climate", centred around 2020. Changes in indices have already occurred between the current climate and historical values such as 1961-1990/
+- GWL1.2 represents the "current climate", around 2011-2030. Changes in indices have already occurred between GWL1.2 and historical periods such as 1991-2020 or 1961-1990
 
 | Index/metric | Current climate <br>1991-2020| GWL1.5 | GWL2 | GWL3 | (Notes) |
 |-----         | :-:                           | :-:    |:-:   |:-:   |-----    |
