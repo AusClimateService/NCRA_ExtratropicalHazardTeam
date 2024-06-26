@@ -55,7 +55,7 @@ Notes:
 
 | RX1D | Low frequency |
 |----- |-----    |
-|![](RX1D_AGCD-05i_MM50_ssp370_v1-r1_GWL30_change.png) |-----    |
+|![RX1D has lots of spatial variable, but increasing (blue) trends are more common than decreases](RX1D_AGCD-05i_MM50_ssp370_v1-r1_GWL30_change.png) | ![low frequency decreases in most of southern Australia, particularly in the southeast; trends are messier in northern regions where this index is dominated by tropical lows](lows_AGCD-05i_MM50_ssp370_v1-r1_GWL30_change.png) |
 |Multi-model median of the % change in RX1D between GWL1.2 and GWL3 |Multi-model median of the % change in low frequency between GWL1.2 and GWL3 |
 
 ## Authors and acknowledgment
