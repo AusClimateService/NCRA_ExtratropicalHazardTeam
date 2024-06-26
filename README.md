@@ -44,6 +44,7 @@ Notes:
 - The data in this table has not been bias corrected; models may have large biases in their simulation of the current climate 
 - The change factors for each percentile are averaged across the whole of Australia - note that this can give slightly *smaller changes* and a *larger range of uncertainty* when compared to changes calculated from regional mean timeseries, as these datasets can have very large interannual variability at individual locations.
 - For the case of low frequency, "Australian" averages are calculated only for latitudes south of 30S, to avoid contamination by trends in tropical lows
+- GWL1.2 represents the "current climate", centred around 2020. Changes in indices have already occurred between the current climate and historical values such as 1961-1990/
 
 | Index/metric | GWL1.5 | GWL2 | GWL3 | (Notes) |
 |-----         | :-:    |:-:   |:-:   |-----    |
@@ -61,13 +62,13 @@ Hazard team:
 ## Details on extratropical lows
 
 Lows are initially identified as individual cyclone centres at a single atmospheric level, and can have a range of intensities.
-For the purposes of this intial dataset we include:
+<br>For the purposes of this intial dataset we include:
 - Surface lows that have closed circulation and persist for at least 6 hours
 - Which have a matching low at 500hPa within 500km at least once
   
-Any grid point within a 5 degree (500km radius) of the low centre is considered to be influenced by the low.
-This is used to calculate what proportion of all 6-hourly observations are influenced by a low
-Note that this tracking does not disinguish between extratropial lows or tropical lows (including but not limited to tropical cyclones)
+Any grid point within a 5 degree (500km radius) of the low centre is considered to be influenced by the low. 
+<br>This is used to calculate what proportion of all 6-hourly observations are influenced by a low.
+<br>Note that this tracking does not disinguish between extratropial lows or tropical lows (including but not limited to tropical cyclones)
 
 ## Details of code 
 
