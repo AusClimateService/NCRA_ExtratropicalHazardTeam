@@ -12,7 +12,7 @@ rcm=('BARPA-R' 'BARPA-R' 'BARPA-R' 'BARPA-R' 'BARPA-R' 'BARPA-R' 'BARPA-R' 'CCAM
 version=v1-r1
 ssp=ssp370
 
-for m in {0..12} ; do
+for m in {13..27} ; do
 
 if [[ $m -lt 7 ]]; then
  yend=12

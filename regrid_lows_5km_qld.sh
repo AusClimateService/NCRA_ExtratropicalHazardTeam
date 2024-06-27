@@ -1,42 +1,27 @@
-#!/bin/sh
+!/bin/sh
 # Get all the RX1H and RX1D
 
-dir=/g/data/ia39/australian-climate-service/test-data/CORDEX-CMIP6/bias-adjustment-output/AGCD-05i/
-odir=/scratch/eg3/asp561/NCRA/bias-adjusted/
-export RUNSTAT_DATE=last
+dir=/scratch/eg3/asp561/NCRA/
+export RUNSTAT_DATE last
 
 agency=('BOM' 'BOM' 'BOM' 'BOM' 'BOM' 'BOM' 'BOM' 'CSIRO' 'CSIRO' 'CSIRO' 'CSIRO' 'CSIRO' 'CSIRO' 'UQ-DES' 'UQ-DES' 'UQ-DES' 'UQ-DES' 'UQ-DES' 'UQ-DES' 'UQ-DES' 'UQ-DES' 'UQ-DES' 'UQ-DES' 'UQ-DES' 'UQ-DES' 'UQ-DES' 'UQ-DES' 'UQ-DES')
 model=('ACCESS-CM2' 'ACCESS-ESM1-5' 'CESM2' 'CMCC-ESM2' 'EC-Earth3' 'MPI-ESM1-2-HR' 'NorESM2-MM' 'ACCESS-CM2' 'ACCESS-ESM1-5' 'CESM2' 'CMCC-ESM2' 'CNRM-ESM2-1' 'EC-Earth3' 'ACCESS-CM2' 'ACCESS-ESM1-5' 'ACCESS-ESM1-5' 'ACCESS-ESM1-5' 'CMCC-ESM2' 'CNRM-CM6-1-HR' 'CNRM-CM6-1-HR' 'EC-Earth3' 'FGOALS-g3' 'GFDL-ESM4' 'GISS-E2-1-G' 'MPI-ESM1-2-LR' 'MRI-ESM2-0' 'NorESM2-MM' 'NorESM2-MM')
 member=('r4i1p1f1' 'r6i1p1f1' 'r11i1p1f1' 'r1i1p1f1' 'r1i1p1f1' 'r1i1p1f1' 'r1i1p1f1' 'r4i1p1f1' 'r6i1p1f1' 'r11i1p1f1' 'r1i1p1f1' 'r1i1p1f2' 'r1i1p1f1' 'r2i1p1f1' 'r20i1p1f1' 'r40i1p1f1' 'r6i1p1f1' 'r1i1p1f1' 'r1i1p1f2' 'r1i1p1f2' 'r1i1p1f1' 'r4i1p1f1' 'r1i1p1f1' 'r2i1p1f2' 'r9i1p1f1' 'r1i1p1f1' 'r1i1p1f1' 'r1i1p1f1')
 rcm=('BARPA-R' 'BARPA-R' 'BARPA-R' 'BARPA-R' 'BARPA-R' 'BARPA-R' 'BARPA-R' 'CCAM-v2203-SN' 'CCAM-v2203-SN' 'CCAM-v2203-SN' 'CCAM-v2203-SN' 'CCAM-v2203-SN' 'CCAM-v2203-SN' 'CCAMoc-v2112' 'CCAMoc-v2112' 'CCAMoc-v2112' 'CCAM-v2105' 'CCAM-v2105' 'CCAMoc-v2112' 'CCAM-v2112' 'CCAM-v2105' 'CCAM-v2105' 'CCAM-v2105' 'CCAM-v2105' 'CCAM-v2105' 'CCAM-v2105' 'CCAMoc-v2112' 'CCAM-v2112')
+version=v1-r1
 
-ssp=ssp370
+for ssp in historical ssp370 ; do
+for m in {13..27} ; do
 
-for method in MRNBC QME ; do
-version=v1-r1-ACS-${method}-AGCD-1960-2022
+sdir="CCAM-UQ-DES"
 
-for m in {0..27} ; do
+fin=$sdir/lows_${model[$m]}_${member[$m]}_${rcm[$m]}_${ssp}.nc
+fout=5km/lows_AGCD-05i_${model[$m]}_${ssp}_${member[$m]}_${agency[$m]}_${rcm[$m]}_${version}_annual.nc
 
-yend=1231
-indir=${dir}/${agency[$m]}/${model[$m]}/${ssp}/${member[$m]}/${rcm[$m]}/$version/day/prAdjust/
-fname=${model[$m]}_${ssp}_${member[$m]}_${agency[$m]}_${rcm[$m]}_${version}
+cdo yearmean ${dir}/${fin} ${dir}/tmp.nc
+cdo remapbil,/g/data/eg3/asp561/Shapefiles/awapgrid ${dir}/tmp.nc ${dir}/${fout}
+rm ${dir}/tmp.nc
 
-for year in {2015..2099}; do
- cdo timmax $indir/prAdjust_AGCD-05i_${fname}*${year}${yend}.nc $odir/tmp_RX1D_${year}.nc
-
- if [[ $year -eq 2015 ]]; then
-  cp $indir/prAdjust_AGCD-05i_${fname}*${year}${yend}.nc $odir/tmp1.nc
- else
-  cdo mergetime $indir/prAdjust_AGCD-05i_${fname}*${year}${yend}.nc $indir/prAdjust_AGCD-05i_${fname}*$((year-1))${yend}.nc $odir/tmp1.nc
- fi
-
- cdo -yearmax -selyear,${year} -runsum,5 $odir/tmp1.nc $odir/tmp_RX5D_${year}.nc 
- rm $odir/tmp1.nc
-done
-cdo mergetime $odir/tmp_RX5D_*.nc $odir/RX5D_AGCD-05i_${fname}_annual.nc
-cdo mergetime $odir/tmp_RX1D_*.nc $odir/RX1D_AGCD-05i_${fname}_annual.nc
-
-rm $odir/tmp*.nc
 done
 done
 
