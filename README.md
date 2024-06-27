@@ -5,18 +5,18 @@ Last update: 20/06/2024
 GitHub repository for ACS Hazard Team on Extratropical Storms to store, track and develop code. 
 
 ## Indices considered by the hazard team:
-- Proportion of observations influenced by a low
-- Highest annual 24 hour total (RX1D)
-- Highest annual 5-day total (RX5D)
-- Highest annual hourly total (RX1H)
+- Proportion of observations influenced by a low (low_freq) - this indicates how often an extraropical cyclone and/or East Coast Low occurs
+- Highest annual 24 hour total (RX1D) - this is the highest daily rainfall falling at each grid point in a year
+- Highest annual 5-day total (RX5D) - this is the highest five-day rainfall total falling at each grid point in a year
+- Highest annual hourly total (RX1H) - this is the highest rainfall falling over one hour at each grid point in a year, an indication of short-lived heavy rainfall relevant to flash flooding
 
 ## Products:
 Status of the NCRA deliverables. 
 
 The three dots (in order from first/top/left to last/bottom/right) represent the datasets used to compute indices:
-- Dot 1: Pre-processed BARPA/CCAM – downscaled but NOT bias-corrected, 5 km (deliverable for 30 June)
-- Dot 2: Bias-corrected BARPA/CCAM – downscaled AND bias-corrected, 5 km (deliverable for 31 July)
-- Dot 3: National Hydrological Projections (NHP1.0) based on CMIP5 – bias-corrected, 5km
+- Dot 1: Pre-processed BARPA/CCAM – downscaled but NOT bias-corrected, 5 km spatial resolution (deliverable for 30 June)
+- Dot 2: Bias-corrected BARPA/CCAM – downscaled AND bias-corrected, 5 km spatial resolution (deliverable for 31 July)
+- Dot 3: National Hydrological Projections (NHP1.0) based on CMIP5 – bias-corrected, 5km spatial resolution 
   
 Note that bias correction is not available for pressure data or sub-daily data
  
@@ -41,17 +41,18 @@ In terms of the colors:
 This table gives the Australian average of the median % change between values at GWL1.2 and at GWLs 1.5, 2, and 3.
 
 Notes:
-- The data in this table has not been bias corrected; models may have large biases in their simulation of the current climate 
+- The first column gives our best estimate of the index in the recent climate (1991-2020) based on observational datasets. This period is not the same as GWL1.2 (which occurs in approximately 2011-2030), but gives an indication of the value to which changes should be compared. The observations used for each metric are mentioned in the notes. 
+- The regional climate model data used this table has not been bias corrected; models may have large biases in their simulation of the current climate 
 - The change factors for each percentile are averaged across the whole of Australia - note that this can give slightly *smaller changes* and a *larger range of uncertainty* when compared to changes calculated from regional mean timeseries, as these datasets can have very large interannual variability at individual locations.
 - For the case of low frequency, "Australian" averages are calculated only for latitudes south of 30S, to avoid contamination by trends in tropical lows
-- GWL1.2 represents the "current climate", around 2011-2030. Changes in indices have already occurred between GWL1.2 and historical periods such as 1991-2020 or 1961-1990
+- GWL1.2 represents the "current climate", around 2011-2030. The changes shown represent *future* changes, which are projected to occur on top of changes that have already occurred between a pre-industrial climate and the present. 
 
-| Index/metric | Current climate <br>1991-2020| GWL1.5 | GWL2 | GWL3 | (Notes) |
+| Index/metric | Observations <br>1991-2020| GWL1.5 | GWL2 | GWL3 | (Notes) |
 |-----         | :-:                           | :-:    |:-:   |:-:   |-----    |
 | low_freq*|1.1% of the time<br>~16 times per year|-5.5%<br>(-16% to +12%)|-9.0%<br>(-24% to +11%)|-12.8%<br>(-32.7% to +2.4%)|*calculated for locations south of 30S<br>Current climate is from BARRA-R2 6-hourly data|
 | RX1D |50.2mm|-0.2%<br>(-16% to +19%)|+1.9%<br>(-21% to +32%)|+7.9%<br>(-18% to +41%)|Current climate is from AGCDv1|
-| RX5D |92.7mm|-0.8%<br>(-16% to +17%)|+0.6%<br>(-21% to +28%)|+5.8%<br>(-18% to +36%)|Current climate is from AGCDv1|
-| RX1H |10.6mm|+0.8%<br>(-11% to +14%)|+3.2%<br>(-14% to +24%)|+10.2%<br>(-9% to +34%)|Current climate is from BARRA-R2, but this dataset may be biased|
+| RX5D |92.7mm|-0.8%<br>(-16% to +17%)|+0.6%<br>(-21% to +28%)|+5.9%<br>(-18% to +36%)|Current climate is from AGCDv1|
+| RX1H |10.6mm|+0.7%<br>(-11% to +14%)|+3.1%<br>(-14% to +24%)|+10.1%<br>(-9% to +34%)|Current climate is from BARRA-R2, but this dataset may be biased|
 
 | RX1D | Low frequency |
 |----- |-----    |
