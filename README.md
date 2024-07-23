@@ -63,6 +63,7 @@ Notes:
 Hazard team:
 - [ ] Acacia Pepler (BOM, lead)
 - [ ] James Risbey (CSIRO, alternate lead)
+- [ ] Tess Parker
 
 ## Details on extratropical lows
 
