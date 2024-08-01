@@ -1,14 +1,22 @@
 # ACS Hazard Team on Extratropical Storms
-Last update: 20/06/2024
+Last update: 01/08/2024 - now based on bias corrected data and improved regional averaging
 
 ## Description
 GitHub repository for ACS Hazard Team on Extratropical Storms to store, track and develop code. 
 
 ## Indices considered by the hazard team:
-- Proportion of observations influenced by a low (low_freq) - this indicates how often an extratropical cyclone and/or East Coast Low occurs
 - Highest annual 24 hour total (RX1D) - this is the highest daily rainfall falling at each grid point in a year
 - Highest annual 5-day total (RX5D) - this is the highest five-day rainfall total falling at each grid point in a year
 - Highest annual hourly total (RX1H) - this is the highest rainfall falling over one hour at each grid point in a year, an indication of short-lived heavy rainfall relevant to flash flooding
+- Proportion of observations influenced by a low (low_freq) - this indicates how often an extratropical cyclone and/or East Coast Low occurs
+
+| Index/metric | Summary of change for GWL2| Summary of change at GWL3 | Additional information|
+|-----         | :-:                        | :-:     |-----    |
+| RX1D | An increase is possible based on phyiscal understanding, but may not be detectible relative to interannual variability. | Rainfall intensity will likely increase, with a best estimate of ~ +12% | Higher changes on the order of 15% per degree of warming are possible (+29% at GWL3). Regional variations in changes are not robust.  |
+| RX5D | An increase is possible based on phyiscal understanding, but may not be detectible relative to interannual variability. | Rainfall intensity will likely increase, with a best estimate of ~ +8% | Higher changes on the order of 15% per degree of warming are possible or +29% at GWL3. Regional variations are not robust, but declines are possible in some regions, particularly where total rainfall declines. |
+| RX1H | Rainfall intensity will likely increase, with a best estimate of ~ +12% | Rainfall intensity will very likely increase, with a best estimate of ~ +29% | Regional models are unable to simulate key processes for subdaily rainfall, and underestimagte future increases. Based on multiple lines of evidence, the best estimate is a +15% (+7 to +28%) increase per degree of warming; this means increases of more than 50% are posible at GWL3 |
+| low_freq | The number of lows will likely decrease in southern Australia, with a best estimate of -8% | The number of lows will very likely decrease in southern Australia, with a best estimate of -13% | Larger declines of 30% or more are possible for GWL3, particularly in the cool season and in southeast Australia. <br> Trends in the most intense and impactful lows may differ, noting that extreme rainfall and sea levels associated with lows will likely increase |
+
 
 ## Products:
 Status of the NCRA deliverables. 
@@ -27,36 +35,37 @@ In terms of the colors:
 
 | Index/metric | time series (ts) | GWLs 2D | MME 2D | MME 2D change | (Notes) |
 |-----         | :-:              |:-:      |:-:     |:-:            |:-:    |
-| low_freq|:green_circle:<br>|:green_circle:<br>|:green_circle:<br>|:green_circle:<br>|deliverable for 30 June<br>N/A<br>N/A|
-| RX1D |:green_circle:<br>:green_circle:|:green_circle:<br>:green_circle:|:green_circle:<br>:green_circle:|:green_circle:<br>:green_circle:|deliverable for 30 June<br>deliverable for 31 July<br>N/A|
-| RX5D |:green_circle:<br>:green_circle:|:green_circle:<br>:green_circle:|:green_circle:<br>:green_circle:|:green_circle:<br>:green_circle:|deliverable for 30 June<br>deliverable for 31 July<br>N/A|
-| RX1H |:green_circle:<br>:green_circle:|:green_circle:<br>:green_circle:|:green_circle:<br>:green_circle:|:green_circle:<br>:green_circle:|deliverable for 30 June<br>deliverable for 31 July<br>N/A|
+| low_freq|:green_circle:<br>|:green_circle:<br>|:green_circle:<br>|:green_circle:<br>|bias correction not available|
+| RX1D |:green_circle:<br>:green_circle:|:green_circle:<br>:green_circle:|:green_circle:<br>:green_circle:|:green_circle:<br>:green_circle:||
+| RX5D |:green_circle:<br>:green_circle:|:green_circle:<br>:green_circle:|:green_circle:<br>:green_circle:|:green_circle:<br>:green_circle:||
+| RX1H |:green_circle:<br>:green_circle:|:green_circle:<br>:green_circle:|:green_circle:<br>:green_circle:|:green_circle:<br>:green_circle:|partially bias corrected (from the bias-corrected daily data)|
 
 ## Data location
-Raw data: /g/data/ia39/ncra/extratropical_storms/5km/GWLs/
-Bias corrected data: /g/data/ia39/ncra/extratropical_storms/bias-corrected/ACS-QME-AGCD-1960-2022/GWLs/
-Data for the Queensland 15-member ensemble has also been processed, but has not yet been made available in ia39.
+- Raw data: /g/data/ia39/ncra/extratropical_storms/5km/GWLs/
+- Bias corrected data: /g/data/ia39/ncra/extratropical_storms/bias-corrected/ACS-QME-AGCD-1960-2022/GWLs/
+- Data for the Queensland 15-member ensemble has also been processed, but has not yet been made available in ia39.
 
 ## Summary statistics
 
 This table gives the Australian average of the median % change between values at GWL1.2 and at GWLs 1.5, 2, and 3.
 
 Notes:
-- The first column gives our best estimate of the index in the current climate (GWL1.2, 2011-2030) based on the bias corrected datasets. In the case of lows, this has been substituted with the BARRA-R2 climatology during 1991-2020, as the raw ACS data underestimates observed low frequency. 
-- For the case of low frequency, "Australian" averages are calculated only for latitudes south of 30S, to avoid contamination by trends in tropical lows
+- The first column gives our best estimate of the index in the current climate (GWL1.2, 2011-2030) based on the bias corrected datasets. In the case of lows, this has been replaced with the BARRA-R2 climatology during 1991-2020, as the raw ACS data underestimates observed low frequency.
 - GWL1.2 represents the "current climate", around 2011-2030. The changes shown represent *future* changes, which are projected to occur on top of changes that have already occurred between a pre-industrial climate and the present.
 - Ranges give the 10th-90th percentile of the ACS ensemble. Numbers are shown in bold where at least 65% of ensemble members agree on the sign of the change ("likely"), and italics indicates agreement across at least 90% of the ensemble ("very likely")
+- For the case of low frequency, "Australian" averages are calculated only for latitudes south of 30S, to avoid contamination by trends in tropical lows
 
-| Index/metric | Observations <br>1991-2020| GWL1.5 | GWL2 | GWL3 | Other lines of evidence|
+
+| Index/metric | Observations <br>1991-2020| GWL1.5 | GWL2 | GWL3 | Notes|
 |-----         | :-:                           | :-:    |:-:   |:-:   |-----    |
-| low_freq*|1.1% of the time<br>~16 times per year|<b>-2%</b><br>(-13% to +5%)|<b>-8.0%</b><br>(-17% to +6%)|<b><i>-13%</b></i><br>(-24% to -4%)|*calculated for locations south of 30S<br>Current climate is from BARRA-R2 6-hourly data<br>Larger declines are possible based on the Queensland data (GWL3: -19% (-27% to -13%)|
-| RX1D |58.8mm|+1%<br>(-3% to +4%)|<b>+6%<br></b>(-4% to +14%)|<b>+12%</b><br>(-2% to +19%)|Best estimate based on the AR&R review is +8% (+2-15%) per degree of warming, implying possible increases of 29% or higher at GWL3|
+| low_freq*|1.1% of the time<br>~16 times per year|<b>-2%</b><br>(-13% to +5%)|<b>-8%</b><br>(-17% to +6%)|<b><i>-13%</b></i><br>(-24% to -4%)|*calculated for locations south of 30S<br>Current climate is from BARRA-R2 6-hourly data<br>Larger declines are possible based on the Queensland data (GWL3: -19% (-27% to -13%)|
+| RX1D |58.8mm|+1%<br>(-3% to +4%)|<b>+6%<br></b>(-4% to +14%)|<b>+12%</b><br>(-2% to +19%)|Best estimate based on the AR&R review is +8% (+2 to +15%) per degree of warming, implying possible increases of 29% or higher at GWL3|
 | RX5D |101.4mm|-1%<br>(-4% to +3%)|+4%<br>(-8% to +11%)|<b>+8%</b><br>(-6% to +14%)|Consistent with the AR&R review, increases of 29% or higher are possible at GWL3|
 | RX1H |19.1mm|+1%<br>(-1% to +6%)|<b>+5%<br></b>(-2% to +12%)|<b><i>+13%</b></i><br>(+1% to +19%)|Regional models miss key processes likely to lead to intensification of hourly extremes. The best estimate based on the AR&R review is +15% (+7-28%) per degree of warming, implying increases of 13-56% at GWL3|
 
 | RX1D | Low frequency |
 |----- |-----    |
-|![RX1D has lots of spatial variability, but increasing (blue) trends are more common than decreases](RX1D_AGCD-05i_MM50_ssp370_v1-r1-ACS-QME-AGCD-1960-2022_GWL15_change.png)
+|![RX1D has lots of spatial variability, but increasing (blue) trends are more common than decreases](RX1D_AGCD-05i_MM50_ssp370_v1-r1-ACS-QME-AGCD-1960-2022_GWL30_change.png)
 ) | ![low frequency decreases in most of southern Australia, particularly in the southeast; trends are messier in northern regions where this index is dominated by tropical lows](lows_AGCD-05i_MM50_ssp370_v1-r1_GWL30_change.png) |
 |Multi-model median of the % change in RX1D between GWL1.2 and GWL3 |Multi-model median of the % change in low frequency between GWL1.2 and GWL3 |
 
