@@ -44,6 +44,7 @@ In terms of the colors:
 - Raw data: /g/data/ia39/ncra/extratropical_storms/5km/GWLs/
 - Bias corrected data: /g/data/ia39/ncra/extratropical_storms/bias-corrected/ACS-QME-AGCD-1960-2022/GWLs/
 - Data for the Queensland 15-member ensemble has also been processed, but has not yet been made available in ia39.
+- Reported changes also rely heavily on the recent [Wasko et al. (2024)](https://doi.org/10.5194/hess-28-1251-2024) sytematic review of changes in rainfall intensity, in support of updates to the Australian Rainfall and Runoff guidelines.
 
 ## Summary statistics
 
@@ -52,13 +53,14 @@ This table gives the Australian average of the median % change between values at
 Notes:
 - The first column gives our best estimate of the index in the current climate (GWL1.2, 2011-2030) based on the bias corrected datasets. In the case of lows, this has been replaced with the BARRA-R2 climatology during 1991-2020, as the raw ACS data underestimates observed low frequency.
 - GWL1.2 represents the "current climate", around 2011-2030. The changes shown represent *future* changes, which are projected to occur on top of changes that have already occurred between a pre-industrial climate and the present.
+- Regional average changes for each GWL are calculated for each ensemble member prior to calculating the ensemble statistics (median and 10th/90th percentiles)
 - Ranges give the 10th-90th percentile of the ACS ensemble. Numbers are shown in bold where at least 65% of ensemble members agree on the sign of the change ("likely"), and italics indicates agreement across at least 90% of the ensemble ("very likely")
 - For the case of low frequency, "Australian" averages are calculated only for latitudes south of 30S, to avoid contamination by trends in tropical lows
 
 
-| Index/metric | Observations <br>1991-2020| GWL1.5 | GWL2 | GWL3 | Notes|
+| Index/metric | GWL1.2| GWL1.5 | GWL2 | GWL3 | Notes|
 |-----         | :-:                           | :-:    |:-:   |:-:   |-----    |
-| low_freq*|1.1% of the time<br>~16 times per year|<b>-2%</b><br>(-13% to +5%)|<b>-8%</b><br>(-17% to +6%)|<b><i>-13%</b></i><br>(-24% to -4%)|*calculated for locations south of 30S<br>Current climate is from BARRA-R2 6-hourly data<br>Larger declines are possible based on the Queensland data (GWL3: -19% (-27% to -13%)|
+| low_freq*|1.1% of the time<br>~16 times per year|<b>-2%</b><br>(-13% to +5%)|<b>-8%</b><br>(-17% to +6%)|<b><i>-13%</b></i><br>(-24% to -4%)|*calculated for locations south of 30S<br>Current climate is from BARRA-R2 6-hourly data (1991-2020)<br>Larger declines are possible based on the Queensland data (GWL3: -19% (-27% to -13%))|
 | RX1D |58.8mm|+1%<br>(-3% to +4%)|<b>+6%<br></b>(-4% to +14%)|<b>+12%</b><br>(-2% to +19%)|Best estimate based on the AR&R review is +8% (+2 to +15%) per degree of warming, implying possible increases of 29% or higher at GWL3|
 | RX5D |101.4mm|-1%<br>(-4% to +3%)|+4%<br>(-8% to +11%)|<b>+8%</b><br>(-6% to +14%)|Consistent with the AR&R review, increases of 29% or higher are possible at GWL3|
 | RX1H |19.1mm|+1%<br>(-1% to +6%)|<b>+5%<br></b>(-2% to +12%)|<b><i>+13%</b></i><br>(+1% to +19%)|Regional models miss key processes likely to lead to intensification of hourly extremes. The best estimate based on the AR&R review is +15% (+7-28%) per degree of warming, implying increases of 13-56% at GWL3|
@@ -78,6 +80,8 @@ Lows are initially identified as individual cyclone centres at a single atmosphe
 Any grid point within a 5 degree (500km radius) of the low centre is considered to be influenced by the low. 
 <br>This is used to calculate what proportion of all 6-hourly observations are influenced by a low.
 <br>Note that this tracking does not disinguish between extratropial lows or tropical lows (including but not limited to tropical cyclones)
+
+This method identifies all lows, including tropical and subtropical lows that may affect northern regions of Australia. The raw ACS model data also does not fully replicate observed patterns, with a tendency to generate too many lows in northrn Australia during the warm half of the year, and too few lows in southern Australia.
 
 ## Details of code 
 
