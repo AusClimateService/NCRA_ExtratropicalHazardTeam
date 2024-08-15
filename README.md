@@ -105,6 +105,8 @@ In addition, there are preliminary code for calculating GWL grids and generating
 Hazard team:
 - [ ] Acacia Pepler (BOM, lead)
 - [ ] James Risbey (CSIRO, alternate lead)
-- [ ] Tess Parker
+- [ ] Carly Tozer (CSIRO)
+- [ ] Tess Parker (CSIRO)
+- [ ] Danielle Udy (BOM)
 
 
