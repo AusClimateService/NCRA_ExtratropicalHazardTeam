@@ -3,8 +3,9 @@ load "$NCARG_ROOT/lib/ncarg/nclscripts/csm/gsn_csm.ncl"
 load "$NCARG_ROOT/lib/ncarg/nclscripts/csm/contributed.ncl"
 load "$NCARG_ROOT/lib/ncarg/nclscripts/esmf/ESMF_regridding.ncl"
 
-varname="RX1D"
-var2="pr"
+var="RX1D"
+var1="pr"
+var2="prAdjust"
 
 ; First, lets get the masks and grids
 ; Only if regridding to 5km
@@ -25,12 +26,14 @@ member=(/"r4i1p1f1","r6i1p1f1","r11i1p1f1","r1i1p1f1","r1i1p1f1","r1i1p1f1","r1i
 rcm=(/"BARPA-R","BARPA-R","BARPA-R","BARPA-R","BARPA-R","BARPA-R","BARPA-R","CCAM-v2203-SN","CCAM-v2203-SN","CCAM-v2203-SN","CCAM-v2203-SN","CCAM-v2203-SN","CCAM-v2203-SN","CCAMoc-v2112","CCAMoc-v2112","CCAMoc-v2112","CCAM-v2105","CCAM-v2105","CCAMoc-v2112","CCAM-v2112","CCAM-v2105","CCAM-v2105","CCAM-v2105","CCAM-v2105","CCAM-v2105","CCAM-v2105","CCAMoc-v2112","CCAM-v2112"/)
 
 
-dir="/scratch/eg3/asp561/NCRA/5km/"
+dir="/scratch/eg3/asp561/NCRA/"
 GWlist=(/1.2,1.5,2,3/)
 ssp="ssp370"
+bc=(/"raw","MRNBC","QME"/)
+
 
 ; Set up matrix - currently using just 13 ACS models not all RCMs
-alldata=new((/dimsizes(mlat),dimsizes(mlon),13,dimsizes(GWlist)/),"float")
+alldata=new((/dimsizes(mlat),dimsizes(mlon),dimsizes(model),dimsizes(bc),dimsizes(GWlist)/),"float")
 alldata!0="lat"
 alldata&lat=mlat
 alldata!1="lon"
@@ -50,15 +53,26 @@ mssp=str_get_field(data,3,delim)
 mgwl=tofloat(str_get_field(data,5,delim))
 
 do m=0,12
+do b=0,2
 
 ; Get years
 
- print(model(m))
- a=addfiles(systemfunc("ls "+dir+"/"+varname+"_AGCD-05i_"+model(m)+"_*_"+member(m)+"_"+agency(m)+"_"+rcm(m)+"_v1-r1_annual.nc"),"r")
+ print(m)
 
- time=cd_calendar(a[:]->time,0)
- tmp=tofloat(a[:]->$var2$)
- ;tmp=a->low_freq
+ if(b.eq.0) then
+  a=addfiles(systemfunc("ls "+dir+"/5km/"+var+"_AGCD-05i_"+model(m)+"_*_"+member(m)+"_"+agency(m)+"_"+rcm(m)+"_v1-r1_annual.nc"),"r")
+  time=cd_calendar(a[:]->time,0)
+  tmp=tofloat(a[:]->$var1$)
+ else
+  a=addfiles(systemfunc("ls "+dir+"/bias-adjusted/"+var+"_AGCD-05i_"+model(m)+"_*_"+member(m)+"_"+agency(m)+"_"+rcm(m)+"_v1-r1-ACS-"+bc(b)+"-AGCD-1960-2022_annual.nc"),"r")
+
+  time=cd_calendar(a[:]->time,0)
+
+  ; QME doing something weird so need to add the two files separately
+  tmp=new((/dimsizes(time(:,0)),dimsizes(mlat),dimsizes(mlon)/),"float")
+  tmp(ind(time(:,0).lt.2015),:,:)=tofloat(a[0]->$var2$)
+  tmp(ind(time(:,0).ge.2015),:,:)=tofloat(a[1]->$var2$)
+ end if
 
 do y=0,dimsizes(GWlist)-1
  I=ind(mname.eq.model(m).and.mmember.eq.member(m).and.mssp.eq.ssp.and.mgwl.eq.GWlist(y))
@@ -66,10 +80,11 @@ do y=0,dimsizes(GWlist)-1
  eyear=tointeger(str_get_field(data(I),7,delim))
 
  J=ind(time(:,0).ge.syear.and.time(:,0).le.eyear)
- alldata(:,:,m,y)=dim_avg_n_Wrap(tmp(J,:,:),0)
+ alldata(:,:,m,b,y)=where(mval.eq.1,dim_avg_n_Wrap(tmp(J,:,:),0),alldata@_FillValue)
  delete([/I,J/])
  end do
  delete([/a,time,tmp/])
+end do
 end do
 
 ; Next step: calculate the 10, 50 and 90 percentiles for each GWL
@@ -77,69 +92,67 @@ end do
 pctiles=(/50,10,90/)
 
 ; Set up matrix - currently using just 13 ACS models not all RCMs
-summarydata=new((/dimsizes(mlat),dimsizes(mlon),dimsizes(pctiles),dimsizes(GWlist)/),"float")
+summarydata=new((/dimsizes(mlat),dimsizes(mlon),dimsizes(pctiles),dimsizes(bc),dimsizes(GWlist)/),"float")
 summarydata!0="lat"
 summarydata&lat=mlat
 summarydata!1="lon"
 summarydata&lon=mlon
 
-summarydata(:,:,0,:)=dim_median_n(alldata,2)
+summarydata(:,:,0,:,:)=dim_median_n(alldata(:,:,0:12,:,:),2)
 
 do i=0,dimsizes(mlat)-1
  do j=0,dimsizes(mlon)-1
+  if(.not.ismissing(mval(i,j))) then
   do y=0,dimsizes(GWlist)-1
-   tmp=alldata(i,j,:,y)
-   qsort(tmp)
+   do b=0,dimsizes(bc)-1
+    tmp=alldata(i,j,0:12,b,y)
+    qsort(tmp)
 
-   do p=1,dimsizes(pctiles)-1
-    summarydata(i,j,p,y)=(/tmp(round(pctiles(p)*dimsizes(tmp)/100,3))/)
+    do p=1,dimsizes(pctiles)-1
+     summarydata(i,j,p,b,y)=(/tmp(round(pctiles(p)*dimsizes(tmp)/100,3))/)
+    end do
    end do
   end do
+  end if
  end do
 end do 
 
-changedata=alldata(:,:,:,1:3)
+changedata=alldata(:,:,:,:,1:3)
 do i=0,2
-  changedata(:,:,:,i)=100*((changedata(:,:,:,i)/alldata(:,:,:,0))-1)
+  changedata(:,:,:,:,i)=100*((changedata(:,:,:,:,i)/where(alldata(:,:,:,:,0).eq.0,alldata@_FillValue,alldata(:,:,:,:,0)))-1)
 end do
 
 ; Set up matrix - currently using just 13 ACS models not all RCMs
-summarychange=new((/dimsizes(mlat),dimsizes(mlon),dimsizes(pctiles),dimsizes(GWlist)-1/),"float")
+summarychange=new((/dimsizes(mlat),dimsizes(mlon),dimsizes(pctiles),dimsizes(bc),dimsizes(GWlist)-1/),"float")
 summarychange!0="lat"
 summarychange&lat=mlat
 summarychange!1="lon"
 summarychange&lon=mlon
 
-summarychange(:,:,0,:)=dim_median_n(changedata,2)
+summarychange(:,:,0,:,:)=dim_median_n(changedata(:,:,0:12,:,:),2)
 
 do i=0,dimsizes(mlat)-1
  do j=0,dimsizes(mlon)-1
+  if(.not.ismissing(mval(i,j)))  then
   do y=0,dimsizes(GWlist)-2
-   tmp=changedata(i,j,:,y)
-   qsort(tmp)
+   do b=0,dimsizes(bc)-1
+    tmp=changedata(i,j,0:12,b,y)
+    qsort(tmp)
 
-   do p=1,dimsizes(pctiles)-1
-    summarychange(i,j,p,y)=(/tmp(round(pctiles(p)*dimsizes(tmp)/100,3))/)
+    do p=1,dimsizes(pctiles)-1
+     summarychange(i,j,p,b,y)=(/tmp(round(pctiles(p)*dimsizes(tmp)/100,3))/)
+    end do
    end do
   end do
+  end if
  end do
-end do
-
-summarychange_v2=new((/dimsizes(mlat),dimsizes(mlon),dimsizes(pctiles),dimsizes(GWlist)-1/),"float")
-summarychange_v2!0="lat"
-summarychange_v2&lat=mlat
-summarychange_v2!1="lon"
-summarychange_v2&lon=mlon
-
-do y=0,dimsizes(GWlist)-2
- summarychange_v2(:,:,:,y)=100*((summarydata(:,:,:,y+1)/summarydata(:,:,:,0))-1)
 end do
 
   res                      = True               ; plot mods desired
   res@cnFillOn             = True               ; turn on color fill
   res@cnLevelSelectionMode = "ExplicitLevels"
-  res@cnLevels =(/0.2,0.4,0.6,0.8,1,1.2,1.4,1.6,1.8,2,2.5,3/)
- ; res@cnLevels             = (/20,30,40,50,60,70,80,100,120,140,160/); ispan(20,120,10)
+ ; res@cnLevels =(/0.2,0.4,0.6,0.8,1,1.2,1.4,1.6,1.8,2,2.5,3/)
+  res@cnLevels             = (/20,30,40,50,60,70,80,100,120,140,160/); ispan(20,120,10)
 ; res@cnLevels             = (/8.,10.,12.,14.,16.,18.,20.,25.,30.,35.,40./)
 ;  res@cnLevels = (/25,50,75,100,150,200,300,400,500,600,800/)
 
@@ -177,19 +190,18 @@ wks_type = "pdf"
 wks_type@wkPaperWidthF = 10
 wks_type@wkPaperHeightF = 8
 
- wks = gsn_open_wks(wks_type,dir+"lows_13ACSRCMs_GWLpanel_range_masked")             ; send graphics to PNG file
+ wks = gsn_open_wks(wks_type,dir+var+"_13ACSRCMs_vsBC_GWLpanel_median_masked")             ; send graphics to PNG file
 
  gsn_define_colormap(wks,"precip_11lev")
 
  plots=new(12,graphic)
 
- do p=0,2
+ do b=0,2
   do y=0,3
-   res@gsnLeftString="GWL"+GWlist(y)+": "+pctiles(p)+"th percentile"
-   tmp1=100*summarydata(:,:,p,y)*mval ; lows as %
-   ;tmp1=summarydata(:,:,p,y)*mval
-   copy_VarMeta(summarydata(:,:,p,y),tmp1)
-   plots(p*4+y) = gsn_csm_contour_map(wks,tmp1, res)
+   res@gsnLeftString="GWL"+GWlist(y)+": "+bc(b)+" data"
+   tmp1=summarydata(:,:,0,b,y)*mval ; lows as %
+   copy_VarMeta(summarydata(:,:,0,b,y),tmp1)
+   plots(b*4+y) = gsn_csm_contour_map(wks,tmp1, res)
    delete(tmp1)
   end do
  end do
@@ -198,8 +210,8 @@ wks_type@wkPaperHeightF = 8
   resP@gsnMaximize      = True                   ; use full page
 resP@gsnPaperOrientation = "portrait"
   resP@lbTitleFontHeightF=0.012
-;  resP@lbTitleString="RX1H (mm)"
-  resP@lbTitleString="% of time influenced by a low"
+  resP@lbTitleString=var+" (mm) (median)"
+;  resP@lbTitleString="% of time influenced by a low"
   resP@lbTitleOn        =  True                ; turn on title
   resP@lbTitlePosition  = "Bottom"              ; title position
   resP@lbTitleDirection = "Across"             ; title direction
@@ -216,7 +228,7 @@ wks_type = "pdf"
 wks_type@wkPaperWidthF = 8
 wks_type@wkPaperHeightF = 8
 
-  wks = gsn_open_wks(wks_type,dir+"lows_13ACSRCMs_GWLpanel_PCchangevsGWL1.2_range_masked")             ; send graphics to PNG file
+  wks = gsn_open_wks(wks_type,dir+var+"_13ACSRCMs_vsBC_GWLpanel_PCchangevsGWL1.2_median_masked")             ; send graphics to PNG file
 
   gsn_define_colormap(wks,"MPL_RdBu")
  delete(res@cnLevels)
@@ -225,13 +237,13 @@ wks_type@wkPaperHeightF = 8
  delete(plots)
  plots=new(9,graphic)
 
- do p=0,2
+ do b=0,2
   do y=0,2
-   res@gsnLeftString="Change at GWL"+GWlist(y+1)+": "+pctiles(p)+"th percentile"
-   tmp1=summarychange(:,:,p,y)*mval
-   copy_VarMeta(summarydata(:,:,p,y),tmp1)
+   res@gsnLeftString="Change at GWL"+GWlist(y+1)+": "+bc(b)+" data"
+   tmp1=summarychange(:,:,0,b,y)*mval
+   copy_VarMeta(summarydata(:,:,0,b,y),tmp1)
 
-   plots(p*3+y) = gsn_csm_contour_map(wks,tmp1, res)     ; create plot
+   plots(b*3+y) = gsn_csm_contour_map(wks,tmp1, res)     ; create plot
   end do
  end do
 
@@ -240,8 +252,7 @@ wks_type@wkPaperHeightF = 8
   resP@gsnMaximize      = True                   ; use full page
 resP@gsnPaperOrientation = "portrait"
   resP@lbTitleFontHeightF=0.012
-  resP@lbTitleString="% change in low frequency relative to GWL1.2"
-;   resP@lbTitleString="% change in RX1H to GWL1.2"
+  resP@lbTitleString="% change in "+var+" relative to GWL1.2 (median)"
   resP@lbTitleOn        =  True                ; turn on title
   resP@lbTitlePosition  = "Bottom"              ; title position
   resP@lbTitleDirection = "Across"             ; title direction

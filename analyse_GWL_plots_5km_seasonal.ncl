@@ -3,8 +3,8 @@ load "$NCARG_ROOT/lib/ncarg/nclscripts/csm/gsn_csm.ncl"
 load "$NCARG_ROOT/lib/ncarg/nclscripts/csm/contributed.ncl"
 load "$NCARG_ROOT/lib/ncarg/nclscripts/esmf/ESMF_regridding.ncl"
 
-varname="RX1D"
-var2="pr"
+varname="lows"
+var2="low_freq"
 
 ; First, lets get the masks and grids
 ; Only if regridding to 5km
@@ -28,9 +28,24 @@ rcm=(/"BARPA-R","BARPA-R","BARPA-R","BARPA-R","BARPA-R","BARPA-R","BARPA-R","CCA
 dir="/scratch/eg3/asp561/NCRA/5km/"
 GWlist=(/1.2,1.5,2,3/)
 ssp="ssp370"
+GWname=(/12,15,20,30/)
+sname="OctMar"
+mlist=(/10,3/)
+;sname="AprSept"
+;mlist=(/4,9/)
+
+
+if(mlist(1).ge.mlist(0)) then
+ slength=dimsizes(ispan(mlist(0),mlist(1),1))
+ slong="Seasonal data for "+sname+" is calculated as the mean of all months "+mlist(0)+"-"+mlist(1)+" in that year, not a seasonal total"
+else
+ slength=dimsizes(ispan(mlist(0),12,1))+dimsizes(ispan(1,mlist(1),1))
+ slong="Seasonal data for "+sname+" is calculated as the mean of all months in the season ending in the specificed year. i.e. data for 2022 is the mean of months "+mlist(0)+"-12 in 2021 and 1-"+mlist(1)+" in 2022. This is necessary to allow for assessment of variability e.g. linked to ENSO, although it means the season occurs slightly earlier than the period used for calculating GWLs"
+end if
+
 
 ; Set up matrix - currently using just 13 ACS models not all RCMs
-alldata=new((/dimsizes(mlat),dimsizes(mlon),13,dimsizes(GWlist)/),"float")
+alldata=new((/dimsizes(mlat),dimsizes(mlon),dimsizes(model),dimsizes(GWlist)/),"float")
 alldata!0="lat"
 alldata&lat=mlat
 alldata!1="lon"
@@ -49,12 +64,16 @@ mmember=str_get_field(data,2,delim)
 mssp=str_get_field(data,3,delim)
 mgwl=tofloat(str_get_field(data,5,delim))
 
-do m=0,12
+test=ispan(0,27,1)
+subset=ind(test.ne.20) ; Can't do EC-Earth3 for Qld due to data problems
+
+do m2=0,26
+m=subset(m2) 
 
 ; Get years
 
- print(model(m))
- a=addfiles(systemfunc("ls "+dir+"/"+varname+"_AGCD-05i_"+model(m)+"_*_"+member(m)+"_"+agency(m)+"_"+rcm(m)+"_v1-r1_annual.nc"),"r")
+ print(m)
+ a=addfiles(systemfunc("ls "+dir+"/"+varname+"_AGCD-05i_"+model(m)+"_*_"+member(m)+"_"+agency(m)+"_"+rcm(m)+"_v1-r1_monthly.nc"),"r")
 
  time=cd_calendar(a[:]->time,0)
  tmp=tofloat(a[:]->$var2$)
@@ -64,10 +83,23 @@ do y=0,dimsizes(GWlist)-1
  I=ind(mname.eq.model(m).and.mmember.eq.member(m).and.mssp.eq.ssp.and.mgwl.eq.GWlist(y))
  syear=tointeger(str_get_field(data(I),6,delim))
  eyear=tointeger(str_get_field(data(I),7,delim))
+ tmp2=new((/20,dimsizes(mlat),dimsizes(mlon)/),"float")
+ ytmp=ispan(syear,eyear,1)
+ do j=0,19
+  if(mlist(1).ge.mlist(0)) then
+    J=ind(time(:,0).eq.ytmp(j).and.time(:,1).ge.mlist(0).and.time(:,1).le.mlist(1))
+  else
+    J=ind((time(:,0).eq.ytmp(j)-1.and.(time(:,1).ge.mlist(0)).or.(time(:,0).eq.ytmp(j).and.time(:,1).le.mlist(1))))
+  end if
+  if(sum(where(.not.ismissing(J),1,0)).eq.slength) then
+   tmp2(j,:,:)=where(mval.eq.1,dim_avg_n_Wrap(tmp(J,:,:),0),alldata@_FillValue)
+  end if
+  delete(J)
+ end do
 
- J=ind(time(:,0).ge.syear.and.time(:,0).le.eyear)
- alldata(:,:,m,y)=dim_avg_n_Wrap(tmp(J,:,:),0)
- delete([/I,J/])
+ alldata(:,:,m,y)=dim_avg_n_Wrap(tmp2,0)
+ delete([/I,tmp2/])
+
  end do
  delete([/a,time,tmp/])
 end do
@@ -83,12 +115,18 @@ summarydata&lat=mlat
 summarydata!1="lon"
 summarydata&lon=mlon
 
-summarydata(:,:,0,:)=dim_median_n(alldata,2)
+
+test=ispan(0,27,1)
+I2=ind(test.gt.12.and.test.ne.20) ; Can't do EC-Earth3 for Qld due to data problems
+
+
+I2=ispan(0,12,1)
+summarydata(:,:,0,:)=dim_median_n(alldata(:,:,I2,:),2)
 
 do i=0,dimsizes(mlat)-1
  do j=0,dimsizes(mlon)-1
   do y=0,dimsizes(GWlist)-1
-   tmp=alldata(i,j,:,y)
+   tmp=alldata(i,j,I2,y)
    qsort(tmp)
 
    do p=1,dimsizes(pctiles)-1
@@ -100,7 +138,7 @@ end do
 
 changedata=alldata(:,:,:,1:3)
 do i=0,2
-  changedata(:,:,:,i)=100*((changedata(:,:,:,i)/alldata(:,:,:,0))-1)
+  changedata(:,:,:,i)=100*((changedata(:,:,:,i)/where(alldata(:,:,:,0).eq.0,alldata@_FillValue,alldata(:,:,:,0)))-1)
 end do
 
 ; Set up matrix - currently using just 13 ACS models not all RCMs
@@ -110,12 +148,12 @@ summarychange&lat=mlat
 summarychange!1="lon"
 summarychange&lon=mlon
 
-summarychange(:,:,0,:)=dim_median_n(changedata,2)
+summarychange(:,:,0,:)=dim_median_n(changedata(:,:,I2,:),2)
 
 do i=0,dimsizes(mlat)-1
  do j=0,dimsizes(mlon)-1
   do y=0,dimsizes(GWlist)-2
-   tmp=changedata(i,j,:,y)
+   tmp=changedata(i,j,I2,y)
    qsort(tmp)
 
    do p=1,dimsizes(pctiles)-1
@@ -177,7 +215,7 @@ wks_type = "pdf"
 wks_type@wkPaperWidthF = 10
 wks_type@wkPaperHeightF = 8
 
- wks = gsn_open_wks(wks_type,dir+"lows_13ACSRCMs_GWLpanel_range_masked")             ; send graphics to PNG file
+ wks = gsn_open_wks(wks_type,dir+"lows_13ACSRCMs_GWLpanel_range_masked_"+sname)             ; send graphics to PNG file
 
  gsn_define_colormap(wks,"precip_11lev")
 
@@ -199,7 +237,7 @@ wks_type@wkPaperHeightF = 8
 resP@gsnPaperOrientation = "portrait"
   resP@lbTitleFontHeightF=0.012
 ;  resP@lbTitleString="RX1H (mm)"
-  resP@lbTitleString="% of time influenced by a low"
+  resP@lbTitleString="% of time influenced by a low ("+sname+")"
   resP@lbTitleOn        =  True                ; turn on title
   resP@lbTitlePosition  = "Bottom"              ; title position
   resP@lbTitleDirection = "Across"             ; title direction
@@ -216,7 +254,7 @@ wks_type = "pdf"
 wks_type@wkPaperWidthF = 8
 wks_type@wkPaperHeightF = 8
 
-  wks = gsn_open_wks(wks_type,dir+"lows_13ACSRCMs_GWLpanel_PCchangevsGWL1.2_range_masked")             ; send graphics to PNG file
+  wks = gsn_open_wks(wks_type,dir+"lows_13ACSRCMs_GWLpanel_PCchangevsGWL1.2_range_masked_"+sname)             ; send graphics to PNG file
 
   gsn_define_colormap(wks,"MPL_RdBu")
  delete(res@cnLevels)
@@ -240,7 +278,7 @@ wks_type@wkPaperHeightF = 8
   resP@gsnMaximize      = True                   ; use full page
 resP@gsnPaperOrientation = "portrait"
   resP@lbTitleFontHeightF=0.012
-  resP@lbTitleString="% change in low frequency relative to GWL1.2"
+  resP@lbTitleString="% change in low frequency relative to GWL1.2 ("+sname+")"
 ;   resP@lbTitleString="% change in RX1H to GWL1.2"
   resP@lbTitleOn        =  True                ; turn on title
   resP@lbTitlePosition  = "Bottom"              ; title position
