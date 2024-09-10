@@ -7,8 +7,9 @@ load "$NCARG_ROOT/lib/ncarg/nclscripts/esmf/ESMF_regridding.ncl"
 
 varname="lows"
 var2="low_freq"
-dir="/g/data/ia39/ncra/extratropical_storms/5km/"
-long_name="Highest annual 24-hour rainfall total"
+;dir="/g/data/ia39/ncra/extratropical_storms/5km/"
+dir="/scratch/eg3/asp561/NCRA/5km/"
+long_name="Proportion of 6-hourly observations with a low within a 5 degree radius."
 mult=1 ; If the data needs to be multiplied to convert to useful units
 units="mm" ; What are the units?
 
@@ -29,18 +30,18 @@ mlon=mfile->longitude
 
 ; Step two - list all the models and members
 
-agency=(/"BOM","BOM","BOM","BOM","BOM","BOM","BOM","CSIRO","CSIRO","CSIRO","CSIRO","CSIRO","CSIRO","UQ-DES","UQ-DES","UQ-DES","UQ-DES","UQ-DES","UQ-DES","UQ-DES","UQ-DES","UQ-DES","UQ-DES","UQ-DES","UQ-DES","UQ-DES","UQ-DES","UQ-DES"/)
+agency=(/"BOM","BOM","BOM","BOM","BOM","BOM","BOM","CSIRO","CSIRO","CSIRO","CSIRO","CSIRO","CSIRO","CSIRO","UQ-DES","UQ-DES","UQ-DES","UQ-DES","UQ-DES","UQ-DES","UQ-DES","UQ-DES","UQ-DES","UQ-DES","UQ-DES","UQ-DES","UQ-DES","UQ-DES","UQ-DES","NSW-Government","NSW-Government","NSW-Government","NSW-Government","NSW-Government","NSW-Government","NSW-Government","NSW-Government","NSW-Government","NSW-Government"/)
 
-model=(/"ACCESS-CM2","ACCESS-ESM1-5","CESM2","CMCC-ESM2","EC-Earth3","MPI-ESM1-2-HR","NorESM2-MM","ACCESS-CM2","ACCESS-ESM1-5","CESM2","CMCC-ESM2","CNRM-ESM2-1","EC-Earth3","ACCESS-CM2","ACCESS-ESM1-5","ACCESS-ESM1-5","ACCESS-ESM1-5","CMCC-ESM2","CNRM-CM6-1-HR","CNRM-CM6-1-HR","EC-Earth3","FGOALS-g3","GFDL-ESM4","GISS-E2-1-G","MPI-ESM1-2-LR","MRI-ESM2-0","NorESM2-MM","NorESM2-MM"/)
+model=(/"ACCESS-CM2","ACCESS-ESM1-5","CESM2","CMCC-ESM2","EC-Earth3","MPI-ESM1-2-HR","NorESM2-MM","ACCESS-CM2","ACCESS-ESM1-5","CESM2","CMCC-ESM2","CNRM-ESM2-1","EC-Earth3","NorESM2-MM","ACCESS-CM2","ACCESS-ESM1-5","ACCESS-ESM1-5","ACCESS-ESM1-5","CMCC-ESM2","CNRM-CM6-1-HR","CNRM-CM6-1-HR","EC-Earth3","FGOALS-g3","GFDL-ESM4","GISS-E2-1-G","MPI-ESM1-2-LR","MRI-ESM2-0","NorESM2-MM","NorESM2-MM","ACCESS-ESM1-5","EC-Earth3-Veg","MPI-ESM1-2-HR","NorESM2-MM","UKESM1-0-LL","ACCESS-ESM1-5","EC-Earth3-Veg","MPI-ESM1-2-HR","NorESM2-MM","UKESM1-0-LL"/)
 
-member=(/"r4i1p1f1","r6i1p1f1","r11i1p1f1","r1i1p1f1","r1i1p1f1","r1i1p1f1","r1i1p1f1","r4i1p1f1","r6i1p1f1","r11i1p1f1","r1i1p1f1","r1i1p1f2","r1i1p1f1","r2i1p1f1","r20i1p1f1","r40i1p1f1","r6i1p1f1","r1i1p1f1","r1i1p1f2","r1i1p1f2","r1i1p1f1","r4i1p1f1","r1i1p1f1","r2i1p1f2","r9i1p1f1","r1i1p1f1","r1i1p1f1","r1i1p1f1"/)
+member=(/"r4i1p1f1","r6i1p1f1","r11i1p1f1","r1i1p1f1","r1i1p1f1","r1i1p1f1","r1i1p1f1","r4i1p1f1","r6i1p1f1","r11i1p1f1","r1i1p1f1","r1i1p1f2","r1i1p1f1","r1i1p1f1","r2i1p1f1","r20i1p1f1","r40i1p1f1","r6i1p1f1","r1i1p1f1","r1i1p1f2","r1i1p1f2","r1i1p1f1","r4i1p1f1","r1i1p1f1","r2i1p1f2","r9i1p1f1","r1i1p1f1","r1i1p1f1","r1i1p1f1","r6i1p1f1","r1i1p1f1","r1i1p1f1","r1i1p1f1","r1i1p1f2","r6i1p1f1","r1i1p1f1","r1i1p1f1","r1i1p1f1","r1i1p1f2"/)
 
-rcm=(/"BARPA-R","BARPA-R","BARPA-R","BARPA-R","BARPA-R","BARPA-R","BARPA-R","CCAM-v2203-SN","CCAM-v2203-SN","CCAM-v2203-SN","CCAM-v2203-SN","CCAM-v2203-SN","CCAM-v2203-SN","CCAMoc-v2112","CCAMoc-v2112","CCAMoc-v2112","CCAM-v2105","CCAM-v2105","CCAMoc-v2112","CCAM-v2112","CCAM-v2105","CCAM-v2105","CCAM-v2105","CCAM-v2105","CCAM-v2105","CCAM-v2105","CCAMoc-v2112","CCAM-v2112"/)
+rcm=(/"BARPA-R","BARPA-R","BARPA-R","BARPA-R","BARPA-R","BARPA-R","BARPA-R","CCAM-v2203-SN","CCAM-v2203-SN","CCAM-v2203-SN","CCAM-v2203-SN","CCAM-v2203-SN","CCAM-v2203-SN","CCAM-v2203-SN","CCAMoc-v2112","CCAMoc-v2112","CCAMoc-v2112","CCAM-v2105","CCAM-v2105","CCAMoc-v2112","CCAM-v2112","CCAM-v2105","CCAM-v2105","CCAM-v2105","CCAM-v2105","CCAM-v2105","CCAM-v2105","CCAMoc-v2112","CCAM-v2112","NARCliM2-0-WRF412R3","NARCliM2-0-WRF412R3","NARCliM2-0-WRF412R3","NARCliM2-0-WRF412R3","NARCliM2-0-WRF412R3","NARCliM2-0-WRF412R5","NARCliM2-0-WRF412R5","NARCliM2-0-WRF412R5","NARCliM2-0-WRF412R5","NARCliM2-0-WRF412R5"/)
 
 version="v1-r1"
 
 ; Set up matrix - currently using just 13 ACS models not all RCMs
-alldata=new((/dimsizes(mlat),dimsizes(mlon),13,dimsizes(GWlist)/),"float")
+alldata=new((/dimsizes(mlat),dimsizes(mlon),dimsizes(model),dimsizes(GWlist)/),"float")
 alldata!0="lat"
 alldata&lat=mlat
 alldata!1="lon"
@@ -58,7 +59,7 @@ mmember=str_get_field(data,2,delim)
 mssp=str_get_field(data,3,delim)
 mgwl=tofloat(str_get_field(data,5,delim))
 
-do m=0,12
+do m=0,dimsizes(model)-1
 
 ; Get years
 
@@ -194,10 +195,12 @@ end do
 
 
 do y=0,dimsizes(GWlist)-1
-do m=0,12
+do m=0,dimsizes(model)-1
 
 ofile=dir+"/GWLs/"+varname+"_AGCD-05i_"+model(m)+"_ssp370_"+member(m)+"_"+agency(m)+"_"+rcm(m)+"_"+version+"_GWL"+GWname(y)+".nc"
 
+if(.not.fileexists(ofile)) then
+print(m)
    a=addfile(ofile,"c")
 
  globalAtt             = True
@@ -215,7 +218,7 @@ globalAtt@history     = systemfunc("date") + ": ncl < /home/561/asp561/Code/NCRA
 
   a->$var2$=tmp
   delete([/ofile,a,tmp,globalAtt/])
-
+end if
 end do
 end do
 

@@ -1,9 +1,11 @@
 #!/bin/sh
 # Get all the RX1H and RX1D
 
-dir=/g/data/ia39/australian-climate-service/test-data/CORDEX-CMIP6/bias-adjustment-output/AGCD-05i/
+#dir=/g/data/py18/BARPA/output/CMIP6/DD/AUS-15/BOM/
+dir=/g/data/hq89/CCAM/output/CMIP6/DD/AUS-10i/CSIRO/
+
+bdir=/g/data/ia39/australian-climate-service/test-data/CORDEX-CMIP6/bias-adjustment-output/AGCD-05i/
 odir=/scratch/eg3/asp561/NCRA/bias-adjusted/
-export RUNSTAT_DATE=last
 
 agency=('BOM' 'BOM' 'BOM' 'BOM' 'BOM' 'BOM' 'BOM' 'CSIRO' 'CSIRO' 'CSIRO' 'CSIRO' 'CSIRO' 'CSIRO' 'UQ-DES' 'UQ-DES' 'UQ-DES' 'UQ-DES' 'UQ-DES' 'UQ-DES' 'UQ-DES' 'UQ-DES' 'UQ-DES' 'UQ-DES' 'UQ-DES' 'UQ-DES' 'UQ-DES' 'UQ-DES' 'UQ-DES' 'CSIRO')
 model=('ACCESS-CM2' 'ACCESS-ESM1-5' 'CESM2' 'CMCC-ESM2' 'EC-Earth3' 'MPI-ESM1-2-HR' 'NorESM2-MM' 'ACCESS-CM2' 'ACCESS-ESM1-5' 'CESM2' 'CMCC-ESM2' 'CNRM-ESM2-1' 'EC-Earth3' 'ACCESS-CM2' 'ACCESS-ESM1-5' 'ACCESS-ESM1-5' 'ACCESS-ESM1-5' 'CMCC-ESM2' 'CNRM-CM6-1-HR' 'CNRM-CM6-1-HR' 'EC-Earth3' 'FGOALS-g3' 'GFDL-ESM4' 'GISS-E2-1-G' 'MPI-ESM1-2-LR' 'MRI-ESM2-0' 'NorESM2-MM' 'NorESM2-MM' 'NorESM2-MM')
@@ -12,32 +14,42 @@ rcm=('BARPA-R' 'BARPA-R' 'BARPA-R' 'BARPA-R' 'BARPA-R' 'BARPA-R' 'BARPA-R' 'CCAM
 
 ssp=historical
 
-for method in QME ; do
-version=v1-r1-ACS-${method}-AGCD-1960-2022
-
 for m in {28..28} ; do
-
 yend=1231
-indir=${dir}/${agency[$m]}/${model[$m]}/${ssp}/${member[$m]}/${rcm[$m]}/$version/day/prAdjust/
-fname=${model[$m]}_${ssp}_${member[$m]}_${agency[$m]}_${rcm[$m]}_${version}
 
-for year in {1960..2014}; do
- cdo timmax $indir/prAdjust_AGCD-05i_${fname}*${year}${yend}.nc $odir/tmp_RX1D_${year}.nc
+indir=${dir}/${model[$m]}/${ssp}/${member[$m]}/${rcm[$m]}/v1-r1/day/
+fname=${model[$m]}_${ssp}_${member[$m]}_${agency[$m]}_${rcm[$m]}
 
- if [[ $year -eq 1960 ]]; then
-  cp $indir/prAdjust_AGCD-05i_${fname}*${year}${yend}.nc $odir/tmp1.nc
- else
-  cdo mergetime $indir/prAdjust_AGCD-05i_${fname}*${year}${yend}.nc $indir/prAdjust_AGCD-05i_${fname}*$((year-1))${yend}.nc $odir/tmp1.nc
- fi
+for year in {1960..2014} ; do
+ cdo -b f32 copy ${indir}/prhmax/v20231206/prhmax_AUS-10i_${fname}_v1-r1_day_${year}01*.nc ${odir}/tmp1.nc
 
- cdo -yearmax -selyear,${year} -runsum,5 $odir/tmp1.nc $odir/tmp_RX5D_${year}.nc 
- rm $odir/tmp1.nc
+ cdo -b f32 mulc,24 ${indir}/pr/v20231206/pr_AUS-10i_${fname}_v1-r1_day_${year}01*.nc ${odir}/tmp2.nc
+
+ cdo div ${odir}/tmp1.nc ${odir}/tmp2.nc ${odir}/tmp3.nc
+
+ cdo remapbil,/g/data/eg3/asp561/Shapefiles/awapgrid ${odir}/tmp3.nc ${odir}/tmp4.nc
+
+ cdo setrtoc,1,1e99,1 ${odir}/tmp4.nc ${odir}/tmp5.nc
+
+
+ for method in MRNBC QME ; do
+  version=v1-r1-ACS-${method}-AGCD-1960-2022
+  indir2=${bdir}/${agency[$m]}/${model[$m]}/${ssp}/${member[$m]}/${rcm[$m]}/$version/day/prAdjust/
+
+  cdo mul ${odir}/tmp5.nc ${indir2}/prAdjust_AGCD-05i_${fname}_${version}_day_${year}01*.nc ${odir}/tmp6.nc
+
+  cdo yearmax ${odir}/tmp6.nc $odir/tmp_RX1H_${version}_${year}.nc
+  rm $odir/tmp6.nc
+ done
+ rm $odir/tmp?.nc
 done
-cdo mergetime $odir/tmp_RX5D_*.nc $odir/RX5D_AGCD-05i_${fname}_annual.nc
-cdo mergetime $odir/tmp_RX1D_*.nc $odir/RX1D_AGCD-05i_${fname}_annual.nc
 
-rm $odir/tmp*.nc
-done
+ for method in MRNBC QME ; do
+  version=v1-r1-ACS-${method}-AGCD-1960-2022
+  cdo mergetime $odir/tmp_RX1H_${version}_*.nc $odir/RX1H_AGCD-05i_${fname}_${version}_annual.nc 
+ done
+
+rm $odir/tmp_RX1H_*.nc
 done
 
 

@@ -177,7 +177,7 @@ wks_type = "pdf"
 wks_type@wkPaperWidthF = 10
 wks_type@wkPaperHeightF = 8
 
- wks = gsn_open_wks(wks_type,dir+"lows_13ACSRCMs_GWLpanel_range_masked")             ; send graphics to PNG file
+ wks = gsn_open_wks(wks_type,dir+"lows_39CORDEXRCMs_GWLpanel_range_masked")             ; send graphics to PNG file
 
  gsn_define_colormap(wks,"precip_11lev")
 
@@ -216,7 +216,7 @@ wks_type = "pdf"
 wks_type@wkPaperWidthF = 8
 wks_type@wkPaperHeightF = 8
 
-  wks = gsn_open_wks(wks_type,dir+"lows_13ACSRCMs_GWLpanel_PCchangevsGWL1.2_range_masked")             ; send graphics to PNG file
+  wks = gsn_open_wks(wks_type,dir+"lows_39CORDEXRCMs_GWLpanel_PCchangevsGWL1.2_range_masked")             ; send graphics to PNG file
 
   gsn_define_colormap(wks,"MPL_RdBu")
  delete(res@cnLevels)

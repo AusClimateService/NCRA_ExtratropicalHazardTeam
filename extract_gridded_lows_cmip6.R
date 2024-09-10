@@ -43,31 +43,18 @@ spreadeffect_simple<-function(lats,lons,glats,glons,spread,winwid=NaN)
 bdir="/g/data/eg3/asp561/CycloneTracking/"
 odir="/scratch/eg3/asp561/NCRA/"
 
-agency=c(rep('BOM',7),rep('CSIRO',7),rep('UQ-DES',16),rep('NARCLIM2',10))
-model=c('ACCESS-CM2','ACCESS-ESM1-5','CESM2','CMCC-ESM2','EC-Earth3','MPI-ESM1-2-HR','NorESM2-MM',
-'ACCESS-CM2','ACCESS-ESM1-5','CESM2','CMCC-ESM2','CNRM-ESM2-1','EC-Earth3','NorESM2-MM',
-'ACCESS-CM2','ACCESS-ESM1-5','ACCESS-ESM1-5','ACCESS-ESM1-5','CMCC-ESM2','CNRM-CM6-1-HR','CNRM-CM6-1-HR','EC-Earth3','FGOALS-g3','GFDL-ESM4','GISS-E2-1-G','MPI-ESM1-2-LR','MRI-ESM2-0','NorESM2-MM','NorESM2-MM','EC-Earth3',
-'ACCESS-ESM1-5','EC-Earth3-Veg','MPI-ESM1-2-HR','NorESM2-MM','UKESM1-0-LL','ACCESS-ESM1-5','EC-Earth3-Veg','MPI-ESM1-2-HR','NorESM2-MM','UKESM1-0-LL')
-member=c('r4i1p1f1','r6i1p1f1','r11i1p1f1','r1i1p1f1','r1i1p1f1','r1i1p1f1','r1i1p1f1',
-'r4i1p1f1','r6i1p1f1','r11i1p1f1','r1i1p1f1','r1i1p1f2','r1i1p1f1','r1i1p1f1',
-'r2i1p1f1','r20i1p1f1','r40i1p1f1','r6i1p1f1','r1i1p1f1','r1i1p1f2','r1i1p1f2','r1i1p1f1','r4i1p1f1','r1i1p1f1','r2i1p1f2','r9i1p1f1','r1i1p1f1','r1i1p1f1','r1i1p1f1','r1i1p1f1',
-'r6i1p1f1','r1i1p1f1','r1i1p1f1','r1i1p1f1','r1i1p1f2','r6i1p1f1','r1i1p1f1','r1i1p1f1','r1i1p1f1','r1i1p1f2')
-rcm=c(rep('BARPA-R',7),rep('CCAM-v2203-SN',7),
-'CCAMoc-v2112','CCAMoc-v2112','CCAMoc-v2112','CCAM-v2105','CCAM-v2105','CCAMoc-v2112','CCAM-v2112','CCAM-v2105','CCAM-v2105','CCAM-v2105','CCAM-v2105','CCAM-v2105','CCAM-v2105','CCAMoc-v2112','CCAM-v2112','CCAMoc-v2112',
-rep('NARCliM2-0-WRF412R3',5),rep('NARCliM2-0-WRF412R5',5))
+agency=c("CSIRO-ARCCSS","EC-Earth-Consortium","MPI-M","MRI","NCC")
+model=c("ACCESS-CM2","EC-Earth3","MPI-ESM1-2-HR","MRI-ESM2-0","NorESM2-MM")
+member=c("r4i1p1f1","r1i1p1f1","r1i1p1f1","r1i1p1f1","r1i1p1f1")
+projS=rep("proj100_lows_rad2cv0.5",5)
+projU=paste0("500hPa_z/",rep("proj100_lows_rad2cv1",5))
 
-rcm2=c(rep("BARPA",7),rep("CCAM",7),rep("CCAM-UQ-DES",16),rep("NARCLIM2",10))
-subdir=c(rep("/BARPA/BARPA-R/",7),rep("/CCAM-CMIP6/",7),rep("/CCAM-QLD/",16),rep("NARCLIM2/",10))
+rcm<-rcm2<-subdir<-rep("CMIP6",5)
 
-projS=c(rep("proj100_lows_rad2cv0.5_ia39",6),"proj100_lows_rad2cv0.5_py18",rep("proj100_lows_rad2cv0.5_hq89",7),
-rep("proj100_lows_rad2cv0.5",15),"proj100_lows_rad2cv0.5_r67",rep("proj100_lows_rad2cv0.5",10))
-projU=paste0("500hPa_z/",c(rep("proj100_lows_rad2cv1_ia39",6),"proj100_lows_rad2cv1_py18",rep("proj100_lows_rad2cv1_hq89",7),
-rep("proj100_lows_rad2cv1",16),rep("proj100_lows_rad2cv1",10)))
-
-ssp="ssp370"
+ssp="historical"
 #year1=c(rep(1951,6),rep(1960,7))
-year1=rep(2015,length(model))
-year2=rep(2099,length(model))
+year1=rep(1951,length(model))
+year2=rep(2014,length(model))
 
 thresh=c(5,0.6) ## Deep surface lows ONLY
 dist=500
@@ -94,7 +81,7 @@ cycreg=focalWeight(raster(tmp,xmn=-winwid,xmx=winwid,ymn=-winwid,ymx=winwid),win
 cycreg[cycreg>0]=1
 
 
-for(i in c(30)) # Have to skip EC-Earth3 due to 500hPa data issue
+for(i in 1:5) # Have to skip EC-Earth3 due to 500hPa data issue
 {
   print(i)
   years=seq(year1[i],year2[i])
@@ -111,9 +98,8 @@ for(i in c(30)) # Have to skip EC-Earth3 due to 500hPa data issue
     year=years[y]
     
     ##Upper
-     if(agency[i]=="UQ-DES") udir=paste0(bdir,subdir[i],model[i],"_",rcm[i],"/",member[i],"/",ssp,"/",projU[i]) else
-      if(agency[i]=="NARCLIM2") udir=paste0(bdir,subdir[i],model[i],"/",ssp,"/",member[i],"/",rcm[i],"/",projU[i])  else  udir=paste0(bdir,subdir[i],model[i],"/",ssp,"/",projU[i])
-      
+     udir=paste0(bdir,subdir[i],"/",model[i],"/",ssp,"/",member[i],"/",projU[i])
+     
       fixesU=read.table(paste0(udir,"/tracks_",year,".dat"), sep="",skip=0)
       colnames(fixesU)<-c("ID","Fix","Date","Time","Open", "Lon","Lat","MSLP","CV","Depth","Radius","Up","Vp")
       ##Clean up dates
@@ -121,7 +107,7 @@ for(i in c(30)) # Have to skip EC-Earth3 due to 500hPa data issue
       yy2=unique(yy)
       if(length(yy2)>1) fixesU=fixesU[yy==yy2[2],]
       fixesU$Date=(fixesU$Date%%10000) + year*10000
-      if((rcm[i]=="CMIP6" & model[i]=="NorESM2-MM" & ssp[y]=="historical") | (rcm[i]=="CMIP6" & model[i]=="CMCC-ESM2" & ssp[y]=="ssp370")) fixesU$Date2=as.POSIXct(paste(fixesU$Date,fixesU$Time,sep=""),format="%Y%m%d %H:%M",tz="GMT")-3*60*60 else 
+      if((rcm[i]=="CMIP6" & model[i]=="NorESM2-MM" & ssp=="historical") | (rcm[i]=="CMIP6" & model[i]=="CMCC-ESM2" & ssp=="ssp370")) fixesU$Date2=as.POSIXct(paste(fixesU$Date,fixesU$Time,sep=""),format="%Y%m%d %H:%M",tz="GMT")-3*60*60 else 
         fixesU$Date2=as.POSIXct(paste(fixesU$Date,fixesU$Time,sep=""),format="%Y%m%d %H:%M",tz="GMT")
       fixesU$Year=floor(fixesU$Date/10000)
       fixesU$Month=floor(fixesU$Date/100)%%100
@@ -146,8 +132,7 @@ for(i in c(30)) # Have to skip EC-Earth3 due to 500hPa data issue
       fixesU$Lon2=floor(fixesU$Lon)%%360
       
       ##Surface
-     if(agency[i]=="UQ-DES") sdir=paste0(bdir,subdir[i],model[i],"_",rcm[i],"/",member[i],"/",ssp,"/",projS[i]) else
-      if(agency[i]=="NARCLIM2") sdir=paste0(bdir,subdir[i],model[i],"/",ssp,"/",member[i],"/",rcm[i],"/",projS[i]) else  sdir=paste0(bdir,subdir[i],model[i],"/",ssp,"/",projS[i])
+     sdir=paste0(bdir,subdir[i],"/",model[i],"/",ssp,"/",member[i],"/",projS[i])
 
       fixesS=read.table(paste0(sdir,"/tracks_",year,".dat"), sep="",skip=0)
       colnames(fixesS)<-c("ID","Fix","Date","Time","Open", "Lon","Lat","MSLP","CV","Depth","Radius","Up","Vp")
@@ -156,7 +141,7 @@ for(i in c(30)) # Have to skip EC-Earth3 due to 500hPa data issue
       yy2=unique(yy)
       if(length(yy2)>1) fixesS=fixesS[yy==yy2[2],]
       fixesS$Date=(fixesS$Date%%10000) + year*10000
-      if((rcm[i]=="CMIP6" & model[i]=="NorESM2-MM" & ssp[y]=="historical") | (rcm[i]=="CMIP6" & model[i]=="CMCC-ESM2" & ssp[y]=="ssp370")) fixesS$Date2=as.POSIXct(paste(fixesS$Date,fixesS$Time,sep=""),format="%Y%m%d %H:%M",tz="GMT")-3*60*60 else 
+      if((rcm[i]=="CMIP6" & model[i]=="NorESM2-MM" & ssp=="historical") | (rcm[i]=="CMIP6" & model[i]=="CMCC-ESM2" & ssp=="ssp370")) fixesS$Date2=as.POSIXct(paste(fixesS$Date,fixesS$Time,sep=""),format="%Y%m%d %H:%M",tz="GMT")-3*60*60 else 
         fixesS$Date2=as.POSIXct(paste(fixesS$Date,fixesS$Time,sep=""),format="%Y%m%d %H:%M",tz="GMT")
       fixesS$Year=floor(fixesS$Date/10000)
       fixesS$Month=floor(fixesS$Date/100)%%100
